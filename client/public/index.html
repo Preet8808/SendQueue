@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item active">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="showPhaseNotice('Contacts Management (Phase 2)')"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="showPhaseNotice('Contact Groups (Phase 2)')"><span style="font-size: 1.1rem;">📁</span> Groups</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="showPhaseNotice('Template Studio (Phase 3)')"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="showPhaseNotice('Campaigns & Queue (Phase 5)')"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="showPhaseNotice('Provider Settings (Phase 4)')"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="page-title">Overview Dashboard</div>
+        <div class="top-actions">
+          <div class="status-pill" id="healthPill">
+            <span class="pulse-dot"></span>
+            <span id="healthText">Connecting...</span>
+          </div>
+          <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
+            <span>Adapter:</span>
+            <strong id="providerBadge">Mock / Local</strong>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body">
+        <!-- Notification Banner -->
+        <div id="phaseBanner" class="alert-box alert-success" style="display: none; margin-bottom: 24px;"></div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Total Contacts</span>
+              <span class="metric-icon">👥</span>
+            </div>
+            <div class="metric-value" id="metricContacts">-</div>
+            <div class="metric-meta">Verified active audience</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Contact Groups</span>
+              <span class="metric-icon">📁</span>
+            </div>
+            <div class="metric-value" id="metricGroups">-</div>
+            <div class="metric-meta">Segmented distribution lists</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Email Templates</span>
+              <span class="metric-icon">📝</span>
+            </div>
+            <div class="metric-value" id="metricTemplates">-</div>
+            <div class="metric-meta">Personalized layouts saved</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Campaigns Created</span>
+              <span class="metric-icon">🚀</span>
+            </div>
+            <div class="metric-value" id="metricCampaigns">-</div>
+            <div class="metric-meta">Rate-controlled runs</div>
+          </div>
+        </div>
+
+        <!-- Section-Wise Execution Progress -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Section-Wise Implementation Roadmap</h2>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+                Following the methodical plan step-by-step to guarantee reliable architecture and zero regressions.
+              </p>
+            </div>
+            <span class="badge-active phase-badge">Phase 1 Complete</span>
+          </div>
+
+          <div class="phase-list">
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">Done</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 1: Project Skeleton, Environment & Database Core</div>
+                <div class="phase-desc">Node.js + Express setup, native SQLite (WAL mode, foreign keys), schema initialization, JWT auth, and seed engine.</div>
+              </div>
+            </div>
+
+            <div class="phase-item active">
+              <span class="phase-badge badge-active">Next Up</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 2: Contact Management, Groups & Smart CSV Importer</div>
+                <div class="phase-desc">Full CRUD for contacts, group segmentation, auto-detect column mapping CSV import, deduplication, and syntax validation.</div>
+              </div>
+            </div>
+
+            <div class="phase-item">
+              <span class="phase-badge badge-pending">Upcoming</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 3: Template Studio & Live Dynamic Personalization Preview</div>
+                <div class="phase-desc">Rich template editor, dynamic token interpolation (<code>{{first_name | 'there'}}</code>), and side-by-side recipient previewer.</div>
+              </div>
+            </div>
+
+            <div class="phase-item">
+              <span class="phase-badge badge-pending">Upcoming</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 4: Multi-Provider Email Dispatcher & Test Sending</div>
+                <div class="phase-desc">Modular adapter layer: Mock Provider (offline zero-cost), Resend, Amazon SES, SendGrid, and standard SMTP.</div>
+              </div>
+            </div>
+
+            <div class="phase-item">
+              <span class="phase-badge badge-pending">Upcoming</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 5: Queue Engine, Rate Limiter & Campaign Orchestrator</div>
+                <div class="phase-desc">Token bucket rate regulation, atomic database state transitions, exponential backoff retries, and crash resumption.</div>
+              </div>
+            </div>
+
+            <div class="phase-item">
+              <span class="phase-badge badge-pending">Upcoming</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 6: Compliance, Webhooks & Delivery Analytics</div>
+                <div class="phase-desc">RFC 8058 one-click unsubscribe, bounce/complaint webhook processing, suppression list filtering, and live SSE event streams.</div>
+              </div>
+            </div>
+
+            <div class="phase-item">
+              <span class="phase-badge badge-pending">Upcoming</span>
+              <div class="phase-details">
+                <div class="phase-name">Phase 7: Frontend Polish, Live Telemetry & Production Hardening</div>
+                <div class="phase-desc">Full telemetry dashboard, real-time charts, error inspector, and production deployment configuration.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick System Status Details -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Database & Core Diagnostics</h2>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Database Storage</div>
+              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">SQLite 3 (WAL Mode)</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;"><code>./storage/sendqueue.db</code></div>
+            </div>
+            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Queue Concurrency Model</div>
+              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">Atomic State Machine</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Crash-resilient, 0 duplicate sends</div>
+            </div>
+            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Provider Test Mode</div>
+              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">Mock Local Adapter Active</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Zero external cost during development</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    function showPhaseNotice(feature) {
+      const banner = document.getElementById('phaseBanner');
+      banner.style.display = 'block';
+      banner.className = 'alert-box alert-success';
+      banner.innerHTML = `<strong>Section-Wise Flow:</strong> <code>${feature}</code> is scheduled for implementation in the next phase. Phase 1 foundation is currently running!`;
+      setTimeout(() => {
+        banner.style.display = 'none';
+      }, 5000);
+    }
+
+    async function initDashboard() {
+      // 1. Check Auth
+      try {
+        const userRes = await API.getMe();
+        if (userRes && userRes.user) {
+          document.getElementById('userName').textContent = userRes.user.name;
+          document.getElementById('userRole').textContent = userRes.user.role;
+          document.getElementById('avatarLetter').textContent = (userRes.user.name || 'A')[0].toUpperCase();
+        }
+      } catch (e) {
+        // If not logged in, redirect to login
+        window.location.href = '/login.html';
+        return;
+      }
+
+      // 2. Fetch Health
+      try {
+        const health = await API.getHealth();
+        if (health.status === 'healthy') {
+          document.getElementById('healthText').textContent = `Live: SQLite (${health.database})`;
+        }
+      } catch (err) {
+        document.getElementById('healthPill').style.background = 'rgba(239, 68, 68, 0.1)';
+        document.getElementById('healthPill').style.color = '#f87171';
+        document.getElementById('healthText').textContent = 'Server Offline';
+      }
+
+      // 3. Fetch Stats
+      try {
+        const statsRes = await API.getStats();
+        if (statsRes && statsRes.stats) {
+          const s = statsRes.stats;
+          document.getElementById('metricContacts').textContent = s.contacts ?? 0;
+          document.getElementById('metricGroups').textContent = s.groups ?? 0;
+          document.getElementById('metricTemplates').textContent = s.templates ?? 0;
+          document.getElementById('metricCampaigns').textContent = s.campaigns ?? 0;
+          document.getElementById('providerBadge').textContent = (s.activeProvider || 'Mock').toUpperCase();
+        }
+      } catch (err) {
+        console.error('Stats loading failed:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>
