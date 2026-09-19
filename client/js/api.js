@@ -79,8 +79,89 @@ const API = {
     return this.request('/api/health');
   },
 
-  async getStats() {
-    return this.request('/api/stats');
+  // Contact endpoints
+  async getContacts(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/api/contacts${query ? '?' + query : ''}`);
+  },
+
+  async getContact(id) {
+    return this.request(`/api/contacts/${id}`);
+  },
+
+  async createContact(data) {
+    return this.request('/api/contacts', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateContact(id, data) {
+    return this.request(`/api/contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteContact(id) {
+    return this.request(`/api/contacts/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // CSV Import endpoints
+  async previewCsv(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = {};
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch('/api/contacts/import-preview', {
+      method: 'POST',
+      headers,
+      body: formData
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to parse CSV file.');
+    }
+    return data;
+  },
+
+  async commitCsvImport({ fileId, mapping, targetGroupId }) {
+    return this.request('/api/contacts/import-commit', {
+      method: 'POST',
+      body: JSON.stringify({ fileId, mapping, targetGroupId })
+    });
+  },
+
+  // Group endpoints
+  async getGroups() {
+    return this.request('/api/groups');
+  },
+
+  async createGroup(data) {
+    return this.request('/api/groups', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateGroup(id, data) {
+    return this.request(`/api/groups/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteGroup(id) {
+    return this.request(`/api/groups/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacts & Groups — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="openGroupManagerModal()"><span style="font-size: 1.1rem;">📁</span> Groups</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Template Studio is coming in Phase 3!')"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Campaign Orchestrator is coming in Phase 5!')"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Provider Settings is coming in Phase 4!')"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="page-title">Audience & Contact Management</div>
+        <div class="top-actions">
+          <button class="btn btn-secondary" onclick="openGroupManagerModal()">
+            📁 Manage Groups
+          </button>
+          <button class="btn btn-secondary" onclick="openImportModal()">
+            📥 Import CSV
+          </button>
+          <button class="btn btn-primary" onclick="openAddContactModal()">
+            + Add Contact
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body">
+        <!-- Filter & Search Toolbar -->
+        <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
+          <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 240px;">
+              <input type="text" id="contactSearchInput" class="form-control" placeholder="🔍 Search contacts by name, email, or company...">
+            </div>
+            <div style="width: 200px;">
+              <select id="groupFilter" class="form-control">
+                <option value="">All Groups</option>
+              </select>
+            </div>
+            <button class="btn btn-secondary" onclick="loadContacts()">
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Contacts Table Card -->
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Company</th>
+                  <th>Groups</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="contactsTableBody">
+                <!-- Injected via contacts.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="pagination-bar">
+            <span id="paginationInfo">Showing 0 to 0 of 0 contacts</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="prevPageBtn">Previous</button>
+              <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="nextPageBtn">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Add / Edit Contact -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title" id="contactModalTitle">Add New Contact</h3>
+        <button class="modal-close" onclick="closeModal('contactModal')">&times;</button>
+      </div>
+      <form id="contactForm">
+        <div class="modal-body">
+          <div id="contactModalAlert" class="alert-box"></div>
+          
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Email Address *</label>
+            <input type="email" id="contactEmail" class="form-control" required placeholder="name@company.com">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="contactFirstName">First Name</label>
+              <input type="text" id="contactFirstName" class="form-control" placeholder="Alex">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactLastName">Last Name</label>
+              <input type="text" id="contactLastName" class="form-control" placeholder="Rivera">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="contactCompany">Company</label>
+              <input type="text" id="contactCompany" class="form-control" placeholder="Acme Corp">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contactCategory">Category / Segment</label>
+              <input type="text" id="contactCategory" class="form-control" placeholder="Enterprise">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contactStatus">Contact Status</label>
+            <select id="contactStatus" class="form-control">
+              <option value="active">Active</option>
+              <option value="unsubscribed">Unsubscribed</option>
+              <option value="bounced">Bounced</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Assign to Groups</label>
+            <div id="contactGroupCheckboxes" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+              <!-- Group checkboxes injected here -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('contactModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveContactBtn">Save Contact</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Smart CSV Importer -->
+  <div class="modal-overlay" id="importModal">
+    <div class="modal-window" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Smart CSV Importer</h3>
+        <button class="modal-close" onclick="closeModal('importModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="importAlert" class="alert-box"></div>
+
+        <!-- Step 1: Upload File -->
+        <div id="importStep1">
+          <div class="dropzone" id="csvDropzone">
+            <div class="dropzone-icon">📥</div>
+            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 6px;">Select or Drop CSV File</h4>
+            <p style="color: var(--text-secondary); font-size: 0.82rem;" id="dropzoneText">
+              Supports CSV files with headers like Email, Name, Company, etc. (up to 15MB)
+            </p>
+            <input type="file" id="csvFileInput" accept=".csv,text/csv" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Step 2: Column Mapping & Validation Review -->
+        <div id="importStep2" style="display: none;">
+          <div id="importStatsBanner" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.82rem;"></div>
+
+          <h4 style="font-size: 0.92rem; color: #fff; margin-bottom: 12px;">Confirm Column Mapping:</h4>
+          <div id="mappingFieldsContainer">
+            <!-- Injected by contacts.js -->
+          </div>
+
+          <div class="form-group" style="margin-top: 20px;">
+            <label class="form-label" for="importTargetGroup">Add Imported Contacts to Group:</label>
+            <select id="importTargetGroup" class="form-control">
+              <!-- Injected by contacts.js -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Step 3: Success Result -->
+        <div id="importStep3" style="display: none; text-align: center; padding: 30px;">
+          <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
+          <h3 style="color: #fff;" id="importSuccessTitle">Import Completed!</h3>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px;" id="importSuccessDesc"></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('importModal')">Close</button>
+        <button type="button" class="btn btn-primary" id="commitImportBtn" style="display: none;" onclick="commitImport()">Confirm & Import Contacts</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Group Manager -->
+  <div class="modal-overlay" id="groupManagerModal">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Manage Contact Groups</h3>
+        <button class="modal-close" onclick="closeModal('groupManagerModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="createGroupForm" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; gap: 10px; align-items: flex-end;">
+            <div style="flex: 1;">
+              <label class="form-label">New Group Name *</label>
+              <input type="text" id="newGroupName" class="form-control" placeholder="e.g. Retail Partners" required>
+            </div>
+            <div style="flex: 1;">
+              <label class="form-label">Description (optional)</label>
+              <input type="text" id="newGroupDesc" class="form-control" placeholder="e.g. Q4 Wholesale contacts">
+            </div>
+            <button type="submit" class="btn btn-primary" style="height: 42px;">+ Add</button>
+          </div>
+        </form>
+
+        <h4 style="font-size: 0.88rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Existing Groups</h4>
+        <div id="groupManagerList">
+          <!-- Injected by contacts.js -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('groupManagerModal')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/contacts.js"></script>
+  <script>
+    // Reveal commit button when step 2 is active
+    const observer = new MutationObserver(() => {
+      const step2 = document.getElementById('importStep2');
+      const btn = document.getElementById('commitImportBtn');
+      if (step2 && btn) {
+        btn.style.display = step2.style.display === 'block' ? 'inline-flex' : 'none';
+      }
+    });
+    observer.observe(document.getElementById('importStep2'), { attributes: true, attributeFilter: ['style'] });
+  </script>
+</body>
+</html>

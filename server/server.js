@@ -7,6 +7,8 @@ require('dotenv').config();
 const { db } = require('./database/db');
 const authRoutes = require('./routes/auth.routes');
 const systemRoutes = require('./routes/system.routes');
+const contactRoutes = require('./routes/contact.routes');
+const groupRoutes = require('./routes/group.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +34,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/groups', groupRoutes);
 app.use('/api', systemRoutes);
 
 // Fallback for Single Page Views or Static HTML
