@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaigns & Queue — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item">
+          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="page-title">Campaigns & Dispatch Queue</div>
+        <div class="top-actions">
+          <div class="status-pill">
+            <span class="pulse-dot"></span>
+            <span>Queue Engine Live</span>
+          </div>
+          <button class="btn btn-primary" onclick="openWizardModal()">
+            + Create Campaign
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body">
+        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h2 style="font-size: 1.15rem; color: #fff; font-weight: 700;">Active & Past Campaigns</h2>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+              Every dispatch is rate-regulated and protected by an atomic database queue state machine.
+            </p>
+          </div>
+        </div>
+
+        <!-- Campaigns List Container -->
+        <div id="campaignsListContainer">
+          <!-- Injected via campaigns.js -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: 4-Step Campaign Creator Wizard -->
+  <div class="modal-overlay" id="campaignWizardModal">
+    <div class="modal-window" style="max-width: 680px;">
+      <!-- Wizard Header & Steps -->
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Create Campaign</h3>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <span class="phase-badge badge-active" id="wizIndicator1">1. Details</span>
+            <span class="phase-badge badge-pending" id="wizIndicator2">2. Audience</span>
+            <span class="phase-badge badge-pending" id="wizIndicator3">3. Message</span>
+            <span class="phase-badge badge-pending" id="wizIndicator4">4. Launch</span>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal('campaignWizardModal')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- STEP 1: Details -->
+        <div id="wizardStep1">
+          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Campaign Parameters</h4>
+          <div class="form-group">
+            <label class="form-label" for="wizCampaignName">Campaign Reference Name *</label>
+            <input type="text" id="wizCampaignName" class="form-control" placeholder="e.g. September Retail Partner Update" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="wizFromName">Sender Display Name *</label>
+              <input type="text" id="wizFromName" class="form-control" placeholder="Acme Updates">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="wizFromEmail">Sender Email Address *</label>
+              <input type="email" id="wizFromEmail" class="form-control" placeholder="notifications@acme.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="wizReplyTo">Reply-To Address (optional)</label>
+            <input type="email" id="wizReplyTo" class="form-control" placeholder="support@acme.com">
+          </div>
+        </div>
+
+        <!-- STEP 2: Audience -->
+        <div id="wizardStep2" style="display: none;">
+          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 6px;">Select Target Audience</h4>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
+            Unchecked means all active contacts will be targeted. Check specific groups to segment:
+          </p>
+
+          <div id="wizardGroupsContainer">
+            <!-- Injected via campaigns.js -->
+          </div>
+        </div>
+
+        <!-- STEP 3: Message / Template -->
+        <div id="wizardStep3" style="display: none;">
+          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Email Content</h4>
+          
+          <div class="form-group">
+            <label class="form-label" for="wizTemplateSelect">Choose Saved Template</label>
+            <select id="wizTemplateSelect" class="form-control">
+              <!-- Injected via campaigns.js -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="wizSubject">Subject Line *</label>
+            <input type="text" id="wizSubject" class="form-control" placeholder="Exciting news for {{company}}, {{first_name}}!">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="wizHtml">HTML Message Body *</label>
+            <textarea id="wizHtml" class="form-control" style="min-height: 160px; font-family: 'Fira Code', monospace; font-size: 0.82rem;" placeholder="<p>Hello {{first_name | 'there'}},</p>"></textarea>
+          </div>
+        </div>
+
+        <!-- STEP 4: Launch & Rate Limit -->
+        <div id="wizardStep4" style="display: none;">
+          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Dispatch Speed & Review</h4>
+
+          <div class="card" style="background: rgba(0,0,0,0.25); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.82rem; color: #fff; font-weight: 600;">Queue Speed (Rate Limit):</span>
+              <span class="badge-group" id="wizSpeedLabel">5 emails / sec</span>
+            </div>
+            <input type="range" id="wizSpeedSlider" min="1" max="50" value="5" style="width: 100%; cursor: pointer;">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+              Paced sending protects your domain reputation and prevents 429 rate limit errors from your provider.
+            </p>
+          </div>
+
+          <div class="card" style="background: rgba(0,0,0,0.25); font-size: 0.84rem; line-height: 1.8;">
+            <div style="font-weight: 700; color: #fff; margin-bottom: 6px;">Campaign Summary:</div>
+            <div>Campaign: <strong id="summaryCampaignName" style="color: #93c5fd;">—</strong></div>
+            <div>Subject: <strong id="summarySubject" style="color: #fff;">—</strong></div>
+            <div>Audience: <strong id="summaryAudience" style="color: #34d399;">—</strong></div>
+            <div>Pacing: <strong id="summarySpeed" style="color: #a5b4fc;">—</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wizard Footer Navigation -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('campaignWizardModal')">Cancel</button>
+        <button type="button" class="btn btn-secondary" id="wizBackBtn" style="display: none;" onclick="setWizardStep(state.wizardStep - 1)">&larr; Back</button>
+        <button type="button" class="btn btn-primary" id="wizNextBtn" onclick="setWizardStep(state.wizardStep + 1)">Next Step &rarr;</button>
+        <button type="button" class="btn btn-primary" id="wizLaunchBtn" style="display: none; background: #10b981;" onclick="launchCampaign()">🚀 Launch Campaign Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Queue Inspector -->
+  <div class="modal-overlay" id="queueInspectorModal">
+    <div class="modal-window" style="max-width: 900px; width: 92vw; height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Queue Telemetry: <span id="inspectorCampaignName" style="color: #93c5fd;">Campaign</span></h3>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
+            Real-time recipient dispatch logs and atomic state transitions.
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeModal('queueInspectorModal')">&times;</button>
+      </div>
+
+      <div class="modal-body" style="flex: 1; padding: 0; overflow-y: auto;">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Recipient Email</th>
+                <th>Company</th>
+                <th>Status</th>
+                <th>Attempts</th>
+                <th>Details / Error / Sent Time</th>
+              </tr>
+            </thead>
+            <tbody id="inspectorTableBody">
+              <!-- Injected via campaigns.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('queueInspectorModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/campaigns.js"></script>
+</body>
+</html>

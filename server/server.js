@@ -11,6 +11,8 @@ const contactRoutes = require('./routes/contact.routes');
 const groupRoutes = require('./routes/group.routes');
 const templateRoutes = require('./routes/template.routes');
 const settingsRoutes = require('./routes/settings.routes');
+const campaignRoutes = require('./routes/campaign.routes');
+const queueWorker = require('./queue/queue.worker');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +42,7 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/campaigns', campaignRoutes);
 app.use('/api', systemRoutes);
 
 // Fallback for Single Page Views or Static HTML
@@ -67,11 +70,14 @@ const server = app.listen(PORT, () => {
   • Environment:   ${process.env.NODE_ENV || 'development'}
   ======================================================
   `);
+  // Start the background dispatch queue worker
+  queueWorker.start();
 });
 
 // Graceful Shutdown
 function handleShutdown(signal) {
   console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+  queueWorker.stop();
   server.close(() => {
     console.log('HTTP server closed.');
     try {

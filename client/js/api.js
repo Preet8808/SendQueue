@@ -240,6 +240,46 @@ const API = {
     return this.request('/api/settings/mock-inbox', {
       method: 'DELETE'
     });
+  },
+
+  // Campaign endpoints
+  async getCampaigns(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/api/campaigns${query ? '?' + query : ''}`);
+  },
+
+  async getCampaign(id) {
+    return this.request(`/api/campaigns/${id}`);
+  },
+
+  async createCampaign(data) {
+    return this.request('/api/campaigns', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async pauseCampaign(id) {
+    return this.request(`/api/campaigns/${id}/pause`, {
+      method: 'POST'
+    });
+  },
+
+  async resumeCampaign(id) {
+    return this.request(`/api/campaigns/${id}/resume`, {
+      method: 'POST'
+    });
+  },
+
+  async cancelCampaign(id) {
+    return this.request(`/api/campaigns/${id}/cancel`, {
+      method: 'POST'
+    });
+  },
+
+  async getCampaignRecipients(id, params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/api/campaigns/${id}/recipients${query ? '?' + query : ''}`);
   }
 };
 
