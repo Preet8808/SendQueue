@@ -204,6 +204,42 @@ const API = {
       method: 'POST',
       body: JSON.stringify(data)
     });
+  },
+
+  // Settings & Provider endpoints
+  async getProviderSettings() {
+    return this.request('/api/settings/providers');
+  },
+
+  async saveProviderSettings(data) {
+    return this.request('/api/settings/providers', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async verifyProvider(data) {
+    return this.request('/api/settings/providers/verify', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async sendTestEmail(data) {
+    return this.request('/api/settings/test-send', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async getMockInbox(limit = 50) {
+    return this.request(`/api/settings/mock-inbox?limit=${limit}`);
+  },
+
+  async clearMockInbox() {
+    return this.request('/api/settings/mock-inbox', {
+      method: 'DELETE'
+    });
   }
 };
 

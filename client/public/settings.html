@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings & Providers — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .active-provider-card {
+      box-shadow: 0 0 0 2px var(--primary), 0 10px 25px -5px rgba(99, 102, 241, 0.3) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Campaign Orchestrator is coming in Phase 5!')"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="page-title">Delivery Infrastructure & Providers</div>
+        <div class="top-actions">
+          <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
+            <span>Multi-Provider Layer Active</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body">
+        <!-- Subnavigation Tabs -->
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+          <button class="btn btn-primary" id="tabBtn_delivery" onclick="switchSettingsTab('delivery')">
+            ⚡ Cloud Providers & Setup
+          </button>
+          <button class="btn btn-secondary" id="tabBtn_testsend" onclick="switchSettingsTab('testsend')">
+            ✉️ Send Test Email
+          </button>
+          <button class="btn btn-secondary" id="tabBtn_inbox" onclick="switchSettingsTab('inbox')">
+            📬 Virtual Test Inbox <span class="badge-group" id="mockInboxCount" style="margin-left: 6px;">0 captured</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: Cloud Providers & Credentials -->
+        <div id="tabPane_delivery">
+          <div style="margin-bottom: 20px;">
+            <h3 style="color: #fff; font-size: 1.1rem;">Select Active Dispatch Provider</h3>
+            <p style="color: var(--text-secondary); font-size: 0.82rem; margin-top: 2px;">
+              SendQueue dispatches all emails through your active provider. Select one to configure:
+            </p>
+          </div>
+
+          <!-- Provider Cards Grid -->
+          <div class="metrics-grid" id="providerCardsContainer" style="margin-bottom: 28px;">
+            <!-- Injected via settings.js -->
+          </div>
+
+          <!-- Provider Configuration Form -->
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: 16px;">Delivery Configuration</h3>
+
+            <form id="settingsForm">
+              <!-- Default Sender -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
+                <div class="form-group">
+                  <label class="form-label" for="defaultFromName">Default Sender Name *</label>
+                  <input type="text" id="defaultFromName" class="form-control" placeholder="e.g. Acme Dispatcher" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="defaultFromEmail">Default Sender Email *</label>
+                  <input type="email" id="defaultFromEmail" class="form-control" placeholder="e.g. notifications@acme.com" required>
+                </div>
+              </div>
+
+              <!-- Mock Config -->
+              <div id="config_mock" style="display: none; margin-bottom: 20px;">
+                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.85rem; color: #a7f3d0;">
+                  <strong>✓ Mock Provider Selected:</strong> No API keys or domain configuration required. All emails sent will be intercepted and safely stored in the <strong>Virtual Test Inbox</strong> tab for instant review.
+                </div>
+              </div>
+
+              <!-- Resend Config -->
+              <div id="config_resend" style="display: none; margin-bottom: 20px;">
+                <div class="form-group">
+                  <label class="form-label" for="resendApiKey">Resend API Key (re_...)</label>
+                  <input type="password" id="resendApiKey" class="form-control" placeholder="re_1234567890abcdef">
+                  <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Obtain from resend.com/api-keys. Verify that your sending domain is active.</p>
+                </div>
+              </div>
+
+              <!-- SendGrid Config -->
+              <div id="config_sendgrid" style="display: none; margin-bottom: 20px;">
+                <div class="form-group">
+                  <label class="form-label" for="sendgridApiKey">SendGrid API Key (SG....)</label>
+                  <input type="password" id="sendgridApiKey" class="form-control" placeholder="SG.xxxxxxxxxxxx">
+                </div>
+              </div>
+
+              <!-- SES Config -->
+              <div id="config_ses" style="display: none; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                  <div class="form-group">
+                    <label class="form-label" for="sesRegion">AWS Region</label>
+                    <input type="text" id="sesRegion" class="form-control" placeholder="us-east-1">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="sesAccessKey">AWS Access Key ID</label>
+                    <input type="text" id="sesAccessKey" class="form-control" placeholder="AKIA...">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="sesSecretKey">AWS Secret Access Key</label>
+                    <input type="password" id="sesSecretKey" class="form-control" placeholder="••••••••">
+                  </div>
+                </div>
+              </div>
+
+              <!-- SMTP Config -->
+              <div id="config_smtp" style="display: none; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 2fr 2fr; gap: 16px;">
+                  <div class="form-group">
+                    <label class="form-label" for="smtpHost">SMTP Server Host</label>
+                    <input type="text" id="smtpHost" class="form-control" placeholder="smtp.mailgun.org or localhost">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="smtpPort">Port</label>
+                    <input type="number" id="smtpPort" class="form-control" placeholder="587">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="smtpUser">SMTP Username</label>
+                    <input type="text" id="smtpUser" class="form-control" placeholder="postmaster@...">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="smtpPass">SMTP Password</label>
+                    <input type="password" id="smtpPass" class="form-control" placeholder="••••••••">
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="submit" class="btn btn-primary" id="saveSettingsBtn">Save All Settings</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 2: Send Test Email -->
+        <div id="tabPane_testsend" style="display: none;">
+          <div class="card" style="max-width: 720px; margin: 0 auto;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Dispatch Test Email</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+                  Verify formatting and deliverability by sending a test message through your active provider.
+                </p>
+              </div>
+            </div>
+
+            <div id="testSendAlert" class="alert-box"></div>
+
+            <form id="testSendForm">
+              <div class="form-group">
+                <label class="form-label" for="testRecipientEmail">Destination Test Email *</label>
+                <input type="email" id="testRecipientEmail" class="form-control" placeholder="your.personal.email@domain.com" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="testTemplateSelect">Use Existing Template (optional):</label>
+                <select id="testTemplateSelect" class="form-control">
+                  <!-- Injected via settings.js -->
+                </select>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Tokens will be automatically resolved with sample test recipient attributes.</p>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="testCustomSubject">Custom Subject (if not using template)</label>
+                <input type="text" id="testCustomSubject" class="form-control" placeholder="SendQueue Test Message — 2026 Delivery Validation">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="testCustomHtml">Custom HTML Message (if not using template)</label>
+                <textarea id="testCustomHtml" class="form-control" style="min-height: 120px; font-family: monospace;" placeholder="<h2>Hello from SendQueue!</h2><p>This confirms that your active provider delivery configuration is working perfectly.</p>"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="sendTestBtn" style="width: 100%; padding: 12px; font-size: 0.95rem;">
+                🚀 Send Test Email
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 3: Virtual Test Inbox -->
+        <div id="tabPane_inbox" style="display: none;">
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <h3 class="card-title">Virtual Test Inbox (Mock Captures)</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+                  All messages sent when the Mock Provider is active are safely captured here without spending live credits.
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" onclick="loadMockInbox()">🔄 Refresh</button>
+                <button class="btn btn-secondary" style="color: #fca5a5;" onclick="clearInbox()">🗑️ Clear Inbox</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Recipient</th>
+                    <th>Subject</th>
+                    <th>Sender</th>
+                    <th>Timestamp</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="mockInboxTableBody">
+                  <!-- Injected via settings.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: View Mock Email Details -->
+  <div class="modal-overlay" id="messageDetailModal">
+    <div class="modal-window" style="max-width: 800px; width: 90vw; height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="msgDetailSubject">Subject</h3>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
+            To: <span id="msgDetailRecipient" style="color: #93c5fd;"></span> | 
+            From: <span id="msgDetailSender" style="color: #a5b4fc;"></span> | 
+            <span id="msgDetailDate" style="color: var(--text-muted);"></span>
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeModal('messageDetailModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="flex: 1; padding: 16px; background: #ffffff; overflow: hidden;">
+        <iframe id="msgDetailIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('messageDetailModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/settings.js"></script>
+</body>
+</html>
