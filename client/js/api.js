@@ -162,6 +162,48 @@ const API = {
     return this.request(`/api/groups/${id}`, {
       method: 'DELETE'
     });
+  },
+
+  // Template endpoints
+  async getTemplates() {
+    return this.request('/api/templates');
+  },
+
+  async getTemplate(id) {
+    return this.request(`/api/templates/${id}`);
+  },
+
+  async createTemplate(data) {
+    return this.request('/api/templates', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateTemplate(id, data) {
+    return this.request(`/api/templates/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteTemplate(id) {
+    return this.request(`/api/templates/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  async cloneTemplate(id) {
+    return this.request(`/api/templates/${id}/clone`, {
+      method: 'POST'
+    });
+  },
+
+  async previewTemplate(data) {
+    return this.request('/api/templates/preview', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   }
 };
 

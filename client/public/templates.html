@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template Studio — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: calc(85vh - 120px);
+    }
+    .token-chip {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.72rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .token-chip:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .code-editor {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      background: #080b11;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: #e2e8f0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      padding: 14px;
+      resize: none;
+      outline: none;
+    }
+    .code-editor:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-glow);
+    }
+    .preview-canvas {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: #ffffff;
+      overflow: hidden;
+    }
+    @media (max-width: 900px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Campaign Orchestrator is coming in Phase 5!')"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" onclick="alert('Provider Settings is coming in Phase 4!')"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="page-title">Template Studio</div>
+        <div class="top-actions">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" onclick="openStudioModal(PRESETS[0])">
+              ⚡ Presets
+            </button>
+            <button class="btn btn-primary" onclick="openStudioModal()">
+              + New Template
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Body -->
+      <div class="page-body">
+        <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h2 style="font-size: 1.1rem; color: #fff; font-weight: 700;">Saved Templates & Layouts</h2>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+              Personalize email subjects and body layouts with dynamic fallback tokens.
+            </p>
+          </div>
+        </div>
+
+        <!-- Templates Card Grid -->
+        <div class="metrics-grid" id="templatesGrid">
+          <!-- Injected via templates.js -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Dual-Pane Studio -->
+  <div class="modal-overlay" id="studioModal">
+    <div class="modal-window" style="max-width: 1280px; width: 96vw; height: 92vh; display: flex; flex-direction: column;">
+      <!-- Studio Header -->
+      <div class="modal-header" style="padding: 14px 24px;">
+        <div style="display: flex; align-items: center; gap: 16px; flex: 1;">
+          <h3 class="modal-title" id="studioModalTitle" style="white-space: nowrap;">Template Studio</h3>
+          <input type="text" id="templateName" class="form-control" placeholder="Template Name (e.g. Q4 Partner Update)" style="max-width: 320px;" required>
+        </div>
+        <button class="modal-close" onclick="closeModal('studioModal')">&times;</button>
+      </div>
+
+      <!-- Studio Body: Dual Pane -->
+      <div class="modal-body" style="flex: 1; padding: 18px 24px; overflow: hidden;">
+        <div class="studio-grid">
+          <!-- Left Pane: Editor -->
+          <div style="display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; padding-right: 6px;">
+            <!-- Subject Field -->
+            <div>
+              <label class="form-label" for="templateSubject">Email Subject Line *</label>
+              <input type="text" id="templateSubject" class="form-control" placeholder="Important update for {{company}}, {{first_name}}!" required>
+            </div>
+
+            <!-- Quick Token Chips -->
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Insert Personalization Tag:</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <span class="token-chip" onclick="insertToken('{{first_name | \\'there\\'}}')">{{first_name}}</span>
+                <span class="token-chip" onclick="insertToken('{{last_name}}')">{{last_name}}</span>
+                <span class="token-chip" onclick="insertToken('{{company | \\'your business\\'}}')">{{company}}</span>
+                <span class="token-chip" onclick="insertToken('{{category}}')">{{category}}</span>
+                <span class="token-chip" onclick="insertToken('{{email}}')">{{email}}</span>
+                <span class="token-chip" onclick="insertToken('{{unsubscribe_url}}')">{{unsubscribe_url}}</span>
+                <span class="token-chip" onclick="insertToken('{{current_year}}')">{{current_year}}</span>
+              </div>
+            </div>
+
+            <!-- Format Tabs -->
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="btn btn-primary" id="tabHtmlBtn" onclick="switchTab('html')" style="padding: 4px 12px; font-size: 0.8rem;">
+                  HTML Body
+                </button>
+                <button type="button" class="btn btn-secondary" id="tabTextBtn" onclick="switchTab('text')" style="padding: 4px 12px; font-size: 0.8rem;">
+                  Plain Text Body
+                </button>
+              </div>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Press Tab for indentation</span>
+            </div>
+
+            <!-- Code Editors -->
+            <div id="htmlEditorWrap" style="flex: 1; display: flex; flex-direction: column;">
+              <textarea id="templateHtml" class="code-editor" placeholder="Write or paste your HTML markup here..."></textarea>
+            </div>
+
+            <div id="textEditorWrap" style="flex: 1; display: none; flex-direction: column;">
+              <textarea id="templateText" class="code-editor" placeholder="Fallback plain text version for non-HTML inboxes..."></textarea>
+            </div>
+          </div>
+
+          <!-- Right Pane: Live Sandboxed Preview -->
+          <div style="display: flex; flex-direction: column; gap: 12px; height: 100%;">
+            <!-- Preview Controls Bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 220px;">
+                <span style="font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap;">Preview As:</span>
+                <select id="previewContactSelect" class="form-control" style="padding: 4px 10px; font-size: 0.82rem;">
+                  <!-- Injected via templates.js -->
+                </select>
+              </div>
+
+              <!-- Viewport Switcher -->
+              <div style="display: flex; gap: 4px;">
+                <button type="button" class="btn btn-primary" id="btnViewportDesktop" onclick="setViewport('desktop')" style="padding: 4px 10px; font-size: 0.75rem;">
+                  🖥️ Desktop
+                </button>
+                <button type="button" class="btn btn-secondary" id="btnViewportMobile" onclick="setViewport('mobile')" style="padding: 4px 10px; font-size: 0.75rem;">
+                  📱 Mobile
+                </button>
+              </div>
+            </div>
+
+            <!-- Subject Preview Header Bar -->
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Recipient:</span>
+                <span style="font-size: 0.75rem; color: #a5b4fc;" id="previewRecipientLabel">Alex Rivera (alex.rivera@example.com)</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.9rem;">✉️</span>
+                <strong style="color: #fff; font-size: 0.88rem;" id="previewResolvedSubject">(No subject)</strong>
+              </div>
+            </div>
+
+            <!-- Live Canvas Viewport -->
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.2); border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 12px; overflow: hidden;">
+              <div id="previewFrameContainer" style="width: 100%; height: 100%; max-width: 100%; transition: max-width 0.25s ease;">
+                <iframe id="previewIframe" class="preview-canvas" sandbox="allow-same-origin"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Studio Footer -->
+      <div class="modal-footer" style="padding: 12px 24px;">
+        <div id="detectedTokensBar" style="margin-right: auto; display: flex; gap: 4px; align-items: center;">
+          <!-- Detected tokens -->
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('studioModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveTemplateBtn" onclick="saveStudioTemplate()">Save Template</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/templates.js"></script>
+</body>
+</html>
