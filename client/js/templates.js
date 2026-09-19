@@ -363,6 +363,14 @@ function setupStudioEvents() {
   const switcher = document.getElementById('previewContactSelect');
   if (switcher) switcher.addEventListener('change', triggerLivePreview);
 
+  // Token chip buttons click
+  document.querySelectorAll('.token-chip[data-token]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const token = btn.getAttribute('data-token');
+      if (token) insertToken(token);
+    });
+  });
+
   // Tab indentation in textareas
   ['templateHtml', 'templateText'].forEach(id => {
     const el = document.getElementById(id);

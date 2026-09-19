@@ -26,6 +26,10 @@
       cursor: pointer;
       transition: var(--transition);
       user-select: none;
+      outline: none;
+      line-height: 1.4;
+      display: inline-flex;
+      align-items: center;
     }
     .token-chip:hover {
       background: var(--primary);
@@ -176,14 +180,14 @@
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
                 <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Insert Personalization Tag:</span>
               </div>
-              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                <span class="token-chip" onclick="insertToken('{{first_name | \\'there\\'}}')">{{first_name}}</span>
-                <span class="token-chip" onclick="insertToken('{{last_name}}')">{{last_name}}</span>
-                <span class="token-chip" onclick="insertToken('{{company | \\'your business\\'}}')">{{company}}</span>
-                <span class="token-chip" onclick="insertToken('{{category}}')">{{category}}</span>
-                <span class="token-chip" onclick="insertToken('{{email}}')">{{email}}</span>
-                <span class="token-chip" onclick="insertToken('{{unsubscribe_url}}')">{{unsubscribe_url}}</span>
-                <span class="token-chip" onclick="insertToken('{{current_year}}')">{{current_year}}</span>
+              <div class="token-chips-bar" id="tokenChipsBar" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <button type="button" class="token-chip" data-token="{{first_name | 'there'}}">{first_name}</button>
+                <button type="button" class="token-chip" data-token="{{last_name}}">{last_name}</button>
+                <button type="button" class="token-chip" data-token="{{company | 'your business'}}">{company}</button>
+                <button type="button" class="token-chip" data-token="{{category}}">{category}</button>
+                <button type="button" class="token-chip" data-token="{{email}}">{email}</button>
+                <button type="button" class="token-chip" data-token="{{unsubscribe_url}}">{unsubscribe_url}</button>
+                <button type="button" class="token-chip" data-token="{{current_year}}">{current_year}</button>
               </div>
             </div>
 
