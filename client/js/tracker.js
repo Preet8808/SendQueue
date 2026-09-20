@@ -19,9 +19,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const nameEl = document.getElementById('userName');
   const roleEl = document.getElementById('userRole');
   const avatarEl = document.getElementById('avatarLetter');
-  if (nameEl) nameEl.textContent = user.name || 'Admin';
-  if (roleEl) roleEl.textContent = user.role || 'Superuser';
-  if (avatarEl) avatarEl.textContent = (user.name || 'A')[0].toUpperCase();
+  if (nameEl) nameEl.textContent = user.name || 'User';
+  if (roleEl) {
+    const role = user.role || 'member';
+    roleEl.textContent = role === 'admin' ? 'Administrator' : 'Member';
+  }
+  if (avatarEl) avatarEl.textContent = (user.name || 'U')[0].toUpperCase();
 
   // Extract campaign ID
   const urlParams = new URLSearchParams(window.location.search);

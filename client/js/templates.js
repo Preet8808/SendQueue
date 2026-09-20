@@ -72,7 +72,8 @@ async function loadCurrentUser() {
     const res = await API.getMe();
     if (res && res.user) {
       document.getElementById('userName').textContent = res.user.name;
-      document.getElementById('userRole').textContent = res.user.role;
+      const role = res.user.role || 'member';
+      document.getElementById('userRole').textContent = role === 'admin' ? 'Administrator' : 'Member';
       document.getElementById('avatarLetter').textContent = (res.user.name || 'A')[0].toUpperCase();
     }
   } catch (e) {

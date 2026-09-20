@@ -50,6 +50,20 @@ const API = {
   },
 
   // Auth endpoints
+  async register(name, email, password) {
+    const res = await this.request('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password })
+    });
+    if (res.token) {
+      this.setToken(res.token);
+    }
+    if (res.user) {
+      localStorage.setItem('sendqueue_user', JSON.stringify(res.user));
+    }
+    return res;
+  },
+
   async login(email, password) {
     const res = await this.request('/api/auth/login', {
       method: 'POST',
@@ -58,7 +72,19 @@ const API = {
     if (res.token) {
       this.setToken(res.token);
     }
+    if (res.user) {
+      localStorage.setItem('sendqueue_user', JSON.stringify(res.user));
+    }
     return res;
+  },
+
+  getUser() {
+    try {
+      const stored = localStorage.getItem('sendqueue_user');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
   },
 
   async logout() {
@@ -66,12 +92,17 @@ const API = {
       await this.request('/api/auth/logout', { method: 'POST' });
     } finally {
       this.setToken('');
+      localStorage.removeItem('sendqueue_user');
       window.location.href = '/login.html';
     }
   },
 
   async getMe() {
-    return this.request('/api/auth/me');
+    const res = await this.request('/api/auth/me');
+    if (res && res.user) {
+      localStorage.setItem('sendqueue_user', JSON.stringify(res.user));
+    }
+    return res;
   },
 
   // System endpoints

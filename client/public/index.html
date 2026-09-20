@@ -270,7 +270,8 @@
         const userRes = await API.getMe();
         if (userRes && userRes.user) {
           document.getElementById('userName').textContent = userRes.user.name;
-          document.getElementById('userRole').textContent = userRes.user.role;
+          const role = userRes.user.role || 'member';
+          document.getElementById('userRole').textContent = role === 'admin' ? 'Administrator' : 'Member';
           document.getElementById('avatarLetter').textContent = (userRes.user.name || 'A')[0].toUpperCase();
         }
       } catch (e) {

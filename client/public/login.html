@@ -3,62 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — SendQueue</title>
+  <title>Sign In & Register — SendQueue</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .auth-tab-bar {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .auth-tab.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+  </style>
 </head>
 <body style="background: radial-gradient(circle at 50% 30%, #1e1b4b, #0b0f19 70%);">
   <div class="login-wrap">
     <div class="login-card">
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
         <div class="brand-icon">⚡</div>
         <div>
           <h1 class="brand-title" style="font-size: 1.35rem;">SendQueue</h1>
-          <p style="font-size: 0.78rem; color: var(--text-secondary);">Enterprise Email Dispatch & Queue Engine</p>
+          <p style="font-size: 0.78rem; color: var(--text-secondary);">Email Dispatch & Queue Platform</p>
         </div>
+      </div>
+
+      <!-- Auth Mode Switcher Tabs -->
+      <div class="auth-tab-bar">
+        <button type="button" class="auth-tab active" id="tabSignIn" onclick="setAuthMode('login')">
+          Sign In
+        </button>
+        <button type="button" class="auth-tab" id="tabRegister" onclick="setAuthMode('register')">
+          Create Account
+        </button>
       </div>
 
       <div id="alertBox" class="alert-box"></div>
 
+      <!-- 1. Sign In Form -->
       <form id="loginForm">
         <div class="form-group">
-          <label class="form-label" for="email">Admin Email</label>
-          <input type="email" id="email" class="form-control" placeholder="admin@sendqueue.local" required value="admin@sendqueue.local">
+          <label class="form-label" for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="admin@sendqueue.local" required value="admin@sendqueue.local">
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password">Password</label>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required value="admin123">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required value="admin123">
         </div>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 8px;">
+        <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 8px;">
           Sign In to Dashboard
         </button>
+
+        <div style="margin-top: 16px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
+          Don't have an account? <a href="javascript:void(0)" onclick="setAuthMode('register')" style="color: #818cf8; text-decoration: none; font-weight: 600;">Create one</a>
+        </div>
+      </form>
+
+      <!-- 2. Create Account Form -->
+      <form id="registerForm" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="regName">Full Name</label>
+          <input type="text" id="regName" class="form-control" placeholder="Jane Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" class="form-control" placeholder="jane@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password (minimum 6 characters)</label>
+          <input type="password" id="regPassword" class="form-control" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <div style="font-size: 0.76rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+          ℹ️ New accounts are registered with standard <strong>Member</strong> privileges.
+        </div>
+
+        <button type="submit" id="regSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;">
+          Create Member Account
+        </button>
+
+        <div style="margin-top: 16px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
+          Already have an account? <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: #818cf8; text-decoration: none; font-weight: 600;">Sign in</a>
+        </div>
       </form>
 
       <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); font-size: 0.78rem; color: var(--text-muted); text-align: center;">
-        Default Seed Credentials: <code>admin@sendqueue.local</code> / <code>admin123</code>
+        Default Admin Seed: <code>admin@sendqueue.local</code> / <code>admin123</code>
       </div>
     </div>
   </div>
 
   <script src="/js/api.js"></script>
   <script>
-    const form = document.getElementById('loginForm');
+    let currentMode = 'login';
     const alertBox = document.getElementById('alertBox');
-    const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', async (e) => {
+    function setAuthMode(mode) {
+      currentMode = mode;
+      alertBox.className = 'alert-box';
+      alertBox.textContent = '';
+
+      const tabSignIn = document.getElementById('tabSignIn');
+      const tabRegister = document.getElementById('tabRegister');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+
+      if (mode === 'login') {
+        tabSignIn.classList.add('active');
+        tabRegister.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        tabRegister.classList.add('active');
+        tabSignIn.classList.remove('active');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+
+    // Sign In Handler
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       alertBox.className = 'alert-box';
       alertBox.textContent = '';
+      const submitBtn = document.getElementById('loginSubmitBtn');
       submitBtn.disabled = true;
       submitBtn.textContent = 'Authenticating...';
 
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
 
       try {
         await API.login(email, password);
@@ -72,6 +169,34 @@
         alertBox.textContent = err.message || 'Invalid email or password';
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign In to Dashboard';
+      }
+    });
+
+    // Register / Create Account Handler
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertBox.className = 'alert-box';
+      alertBox.textContent = '';
+      const submitBtn = document.getElementById('regSubmitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
+
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await API.register(name, email, password);
+        alertBox.className = 'alert-box alert-success show';
+        alertBox.textContent = `Welcome, ${res.user?.name || name}! Account created as Member. Redirecting...`;
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 600);
+      } catch (err) {
+        alertBox.className = 'alert-box alert-danger show';
+        alertBox.textContent = err.message || 'Failed to create account.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Member Account';
       }
     });
   </script>
