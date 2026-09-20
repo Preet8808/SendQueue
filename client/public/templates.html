@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Template Studio — SendQueue</title>
+  <title>Email Templates — SendQueue</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,7 +80,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <div class="brand-title">SendQueue</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Sender</div>
         </div>
         <span class="brand-badge">v1.0</span>
       </div>
@@ -126,14 +126,14 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="page-title">Template Studio</div>
+        <div class="page-title">Email Templates</div>
         <div class="top-actions">
           <div style="display: flex; gap: 8px;">
             <button class="btn btn-secondary" onclick="openStudioModal(PRESETS[0])">
-              ⚡ Presets
+              ⚡ Example Templates
             </button>
             <button class="btn btn-primary" onclick="openStudioModal()">
-              + New Template
+              + Create Template
             </button>
           </div>
         </div>
@@ -143,9 +143,9 @@
       <div class="page-body">
         <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
           <div>
-            <h2 style="font-size: 1.1rem; color: #fff; font-weight: 700;">Saved Templates & Layouts</h2>
+            <h2 style="font-size: 1.1rem; color: #fff; font-weight: 700;">Saved Email Templates</h2>
             <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
-              Personalize email subjects and body layouts with dynamic fallback tokens.
+              Create reusable emails. Use tags like {{first_name}} to add personal details automatically.
             </p>
           </div>
         </div>
@@ -164,8 +164,8 @@
       <!-- Studio Header -->
       <div class="modal-header" style="padding: 14px 24px;">
         <div style="display: flex; align-items: center; gap: 16px; flex: 1;">
-          <h3 class="modal-title" id="studioModalTitle" style="white-space: nowrap;">Template Studio</h3>
-          <input type="text" id="templateName" class="form-control" placeholder="Template Name (e.g. Q4 Partner Update)" style="max-width: 320px;" required>
+          <h3 class="modal-title" id="studioModalTitle" style="white-space: nowrap;">Email Template</h3>
+          <input type="text" id="templateName" class="form-control" placeholder="Template Name (e.g. Monthly Newsletter)" style="max-width: 320px;" required>
         </div>
         <button class="modal-close" onclick="closeModal('studioModal')">&times;</button>
       </div>
@@ -184,7 +184,7 @@
             <!-- Quick Token Chips -->
             <div>
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Insert Personalization Tag:</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Insert Personal Details (Tags):</span>
               </div>
               <div class="token-chips-bar" id="tokenChipsBar" style="display: flex; flex-wrap: wrap; gap: 6px;">
                 <button type="button" class="token-chip" data-token="{{first_name | 'there'}}">{first_name}</button>
@@ -201,22 +201,22 @@
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <div style="display: flex; gap: 6px;">
                 <button type="button" class="btn btn-primary" id="tabHtmlBtn" onclick="switchTab('html')" style="padding: 4px 12px; font-size: 0.8rem;">
-                  HTML Body
+                  Rich Text (HTML)
                 </button>
                 <button type="button" class="btn btn-secondary" id="tabTextBtn" onclick="switchTab('text')" style="padding: 4px 12px; font-size: 0.8rem;">
-                  Plain Text Body
+                  Plain Text
                 </button>
               </div>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">Press Tab for indentation</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Tip: Press Tab to indent</span>
             </div>
 
             <!-- Code Editors -->
             <div id="htmlEditorWrap" style="flex: 1; display: flex; flex-direction: column;">
-              <textarea id="templateHtml" class="code-editor" placeholder="Write or paste your HTML markup here..."></textarea>
+              <textarea id="templateHtml" class="code-editor" placeholder="Write your email content in HTML here..."></textarea>
             </div>
 
             <div id="textEditorWrap" style="flex: 1; display: none; flex-direction: column;">
-              <textarea id="templateText" class="code-editor" placeholder="Fallback plain text version for non-HTML inboxes..."></textarea>
+              <textarea id="templateText" class="code-editor" placeholder="Plain text version for simple email apps..."></textarea>
             </div>
           </div>
 
@@ -225,7 +225,7 @@
             <!-- Preview Controls Bar -->
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
               <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 220px;">
-                <span style="font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap;">Preview As:</span>
+                <span style="font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap;">Preview With Contact:</span>
                 <select id="previewContactSelect" class="form-control" style="padding: 4px 10px; font-size: 0.82rem;">
                   <!-- Injected via templates.js -->
                 </select>

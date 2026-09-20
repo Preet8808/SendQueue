@@ -13,41 +13,41 @@ let state = {
 // Starter Presets for Quick Inspiration
 const PRESETS = [
   {
-    name: 'Product Launch Announcement',
-    subject: 'Introducing our newest feature for {{company | "your team"}}, {{first_name}}!',
+    name: 'Announcement or Product Update',
+    subject: 'Important update for {{company | "your team"}}, {{first_name}}!',
     body_html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #1f2937; line-height: 1.6; background: #ffffff; padding: 30px; border-radius: 8px;">
   <h1 style="color: #4f46e5; font-size: 24px; margin-bottom: 16px;">Hello {{first_name | "there"}},</h1>
-  <p>We are thrilled to announce our latest updates built specifically to accelerate operations at <strong>{{company | "your organization"}}</strong>.</p>
-  <p>With high-speed queue dispatching and 100% provider compliance, your team can deliver critical messages with confidence.</p>
+  <p>We are excited to share our latest updates built specifically for <strong>{{company | "your organization"}}</strong>.</p>
+  <p>With fast and reliable delivery, you can send critical emails with complete confidence.</p>
   <div style="text-align: center; margin: 30px 0;">
     <a href="https://example.com/start" style="background: #4f46e5; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Get Started Free &rarr;</a>
   </div>
-  <p style="font-size: 14px; color: #6b7280;">Best regards,<br>The SendQueue Team</p>
+  <p style="font-size: 14px; color: #6b7280;">Best regards,<br>The Team</p>
   <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
-  <p style="font-size: 12px; color: #9ca3af; text-align: center;">You received this email because you opted in at {{company | "our site"}}. If you wish to unsubscribe, <a href="{{unsubscribe_url}}" style="color: #6b7280;">click here</a>.</p>
+  <p style="font-size: 12px; color: #9ca3af; text-align: center;">You received this email because you subscribed. If you wish to unsubscribe, <a href="{{unsubscribe_url}}" style="color: #6b7280;">click here</a>.</p>
 </div>`,
-    body_text: `Hello {{first_name | "there"}},\n\nWe are thrilled to announce our latest updates built for {{company | "your organization"}}.\n\nExplore now: https://example.com/start\n\nUnsubscribe: {{unsubscribe_url}}`
+    body_text: `Hello {{first_name | "there"}},\n\nWe are excited to share our latest updates built for {{company | "your organization"}}.\n\nExplore now: https://example.com/start\n\nUnsubscribe: {{unsubscribe_url}}`
   },
   {
-    name: 'Personal B2B Follow-up',
+    name: 'Personal Follow-up',
     subject: 'Quick question regarding {{company | "your team"}}, {{first_name}}',
     body_html: `<div style="font-family: Georgia, serif; max-width: 580px; margin: 0 auto; color: #111827; line-height: 1.7; padding: 24px;">
   <p>Hi {{first_name | "there"}},</p>
-  <p>I hope your week is off to a great start at {{company | "your company"}}.</p>
-  <p>I noticed you recently explored automated campaign tools. I wanted to reach out and see if you had 5 minutes this Thursday for a brief chat on how we can help optimize your email deliverability rates?</p>
-  <p>Looking forward to hearing your thoughts.</p>
-  <p>Warmly,<br><strong>Preet</strong><br>Founder, SendQueue</p>
-  <p style="font-size: 11px; color: #9ca3af; margin-top: 40px;">To opt out, click <a href="{{unsubscribe_url}}">here</a>.</p>
+  <p>I hope your week is going great at {{company | "your company"}}.</p>
+  <p>I wanted to check in and see if you had 5 minutes this week for a brief chat?</p>
+  <p>Looking forward to hearing from you.</p>
+  <p>Warmly,<br><strong>Preet</strong></p>
+  <p style="font-size: 11px; color: #9ca3af; margin-top: 40px;">To unsubscribe, click <a href="{{unsubscribe_url}}">here</a>.</p>
 </div>`,
-    body_text: `Hi {{first_name | "there"}},\n\nI hope your week is off to a great start at {{company | "your company"}}.\n\nI noticed you explored automated campaign tools and wanted to see if you had 5 minutes this Thursday to chat?\n\nWarmly,\nPreet\n\nOpt out: {{unsubscribe_url}}`
+    body_text: `Hi {{first_name | "there"}},\n\nI hope your week is going great at {{company | "your company"}}.\n\nWanted to check in and see if you had 5 minutes this week to chat?\n\nWarmly,\nPreet\n\nUnsubscribe: {{unsubscribe_url}}`
   },
   {
-    name: 'Exclusive VIP Discount',
-    subject: 'Special 20% off for {{company | "our VIP partners"}} 🎁',
+    name: 'Special Discount or Promotion',
+    subject: 'Special 20% off for {{company | "our valued partners"}} 🎁',
     body_html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111; line-height: 1.6; background: #fafafa; border: 1px solid #eaeaea; padding: 32px; border-radius: 12px;">
-  <div style="background: #10b981; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 16px;">EXCLUSIVE PARTNER BENEFIT</div>
-  <h2 style="font-size: 22px; margin-bottom: 12px;">Exclusive 20% savings for {{first_name | "valued partner"}},</h2>
-  <p>As a key partner in our {{category | "enterprise"}} tier, we are extending a private voucher for your entire team at <strong>{{company | "your firm"}}</strong>.</p>
+  <div style="background: #10b981; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 16px;">SPECIAL BENEFIT</div>
+  <h2 style="font-size: 22px; margin-bottom: 12px;">Special 20% savings for {{first_name | "friend"}},</h2>
+  <p>As a valued partner, we are offering a discount code for your entire team at <strong>{{company | "your company"}}</strong>.</p>
   <div style="background: #ffffff; border: 2px dashed #10b981; padding: 20px; text-align: center; border-radius: 8px; margin: 24px 0;">
     <span style="font-size: 14px; color: #666;">YOUR COUPON CODE:</span>
     <div style="font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #10b981; margin-top: 4px;">SENDQUEUE-VIP</div>
@@ -55,7 +55,7 @@ const PRESETS = [
   <p style="font-size: 13px; color: #777;">Offer valid until the end of the month.</p>
   <p style="font-size: 11px; color: #aaa; margin-top: 30px;">Sent to {{email}}. <a href="{{unsubscribe_url}}" style="color: #888;">Unsubscribe</a></p>
 </div>`,
-    body_text: `Special 20% off for {{company | "our VIP partners"}}!\n\nHello {{first_name | "valued partner"}},\n\nUse coupon code: SENDQUEUE-VIP\n\nSent to: {{email}}\nUnsubscribe: {{unsubscribe_url}}`
+    body_text: `Special 20% off for {{company | "our valued partners"}}!\n\nHello {{first_name | "friend"}},\n\nUse coupon code: SENDQUEUE-VIP\n\nSent to: {{email}}\nUnsubscribe: {{unsubscribe_url}}`
   }
 ];
 
@@ -119,7 +119,7 @@ function renderTemplatesGrid() {
       <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
         <div style="font-size: 3rem; margin-bottom: 12px;">📝</div>
         <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 6px;">No email templates found</h3>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Create your first template or start from a pre-made preset.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Create your first template or start from an example.</p>
         <button class="btn btn-primary" onclick="openStudioModal()">+ Create Template</button>
       </div>
     `;
@@ -127,7 +127,7 @@ function renderTemplatesGrid() {
   }
 
   container.innerHTML = state.templates.map(t => {
-    const tokenPills = (t.tokens || []).map(tok => `<span class="badge-group" style="font-size: 0.68rem;">{{${escapeHtml(tok)}}}</span>`).join(' ') || '<span style="font-size: 0.72rem; color: var(--text-muted);">No tokens</span>';
+    const tokenPills = (t.tokens || []).map(tok => `<span class="badge-group" style="font-size: 0.68rem;">{{${escapeHtml(tok)}}}</span>`).join(' ') || '<span style="font-size: 0.72rem; color: var(--text-muted);">No tags used</span>';
 
     return `
       <div class="metric-card" style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -141,14 +141,14 @@ function renderTemplatesGrid() {
             <div style="font-size: 0.84rem; color: #93c5fd; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject)}</div>
           </div>
           <div style="margin-bottom: 16px;">
-            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Detected Tokens:</div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Personal Tags Used:</div>
             <div style="display: flex; flex-wrap: wrap; gap: 4px;">${tokenPills}</div>
           </div>
         </div>
 
         <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 14px; margin-top: 10px;">
           <button class="btn btn-primary" style="flex: 1; padding: 6px 12px; font-size: 0.82rem;" onclick="openEditStudioModal('${t.id}')">
-            ✏️ Edit Studio
+            ✏️ Edit Template
           </button>
           <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.82rem;" onclick="cloneTemplate('${t.id}')" title="Duplicate template">
             📋
@@ -165,7 +165,7 @@ function renderTemplatesGrid() {
 // --- Studio Modal & Dual-Pane Editor ---
 function openStudioModal(preset = null) {
   state.activeTemplateId = null;
-  document.getElementById('studioModalTitle').textContent = 'Template Studio — New Template';
+  document.getElementById('studioModalTitle').textContent = 'Create New Email Template';
   document.getElementById('templateName').value = preset ? preset.name : 'Untitled Template';
   document.getElementById('templateSubject').value = preset ? preset.subject : 'Hello {{first_name | "there"}}, important update for {{company}}';
   document.getElementById('templateHtml').value = preset ? preset.body_html : `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">\n  <h2>Hi {{first_name | "there"}},</h2>\n  <p>We are reaching out to {{company | "your business"}} regarding...</p>\n  <p>Unsubscribe: <a href="{{unsubscribe_url}}">Click here</a></p>\n</div>`;
@@ -181,7 +181,7 @@ function openEditStudioModal(id) {
   if (!t) return;
 
   state.activeTemplateId = id;
-  document.getElementById('studioModalTitle').textContent = `Template Studio — ${t.name}`;
+  document.getElementById('studioModalTitle').textContent = `Edit Template — ${t.name}`;
   document.getElementById('templateName').value = t.name;
   document.getElementById('templateSubject').value = t.subject;
   document.getElementById('templateHtml').value = t.body_html;
@@ -195,7 +195,7 @@ function openEditStudioModal(id) {
 function loadPreset(index) {
   const preset = PRESETS[index];
   if (!preset) return;
-  if (confirm(`Load "${preset.name}" preset into editor? Any unsaved edits will be replaced.`)) {
+  if (confirm(`Load "${preset.name}" example into the editor? Any unsaved changes will be replaced.`)) {
     document.getElementById('templateName').value = preset.name;
     document.getElementById('templateSubject').value = preset.subject;
     document.getElementById('templateHtml').value = preset.body_html;

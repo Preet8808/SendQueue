@@ -267,7 +267,7 @@ async function handleFileSelect(file) {
   alertEl.style.display = 'none';
 
   const uploadBtn = document.getElementById('dropzoneText');
-  uploadBtn.textContent = `Analyzing ${file.name}...`;
+  uploadBtn.textContent = `Reading ${file.name}...`;
 
   try {
     const preview = await API.previewCsv(file);
@@ -294,7 +294,7 @@ function showImportMappingStep(preview) {
     { key: 'first_name', label: 'First Name', required: false },
     { key: 'last_name', label: 'Last Name', required: false },
     { key: 'company', label: 'Company Name', required: false },
-    { key: 'category', label: 'Category / Tier', required: false }
+    { key: 'category', label: 'Category / Tag', required: false }
   ];
 
   const container = document.getElementById('mappingFieldsContainer');
@@ -318,9 +318,9 @@ function showImportMappingStep(preview) {
   document.getElementById('importStatsBanner').innerHTML = `
     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
       <span>Total Rows: <strong>${s.total}</strong></span>
-      <span style="color: #34d399;">Valid to Import: <strong>${s.validCount}</strong></span>
+      <span style="color: #34d399;">Ready to Import: <strong>${s.validCount}</strong></span>
       <span style="color: #fca5a5;">Duplicates: <strong>${s.duplicateCount}</strong></span>
-      <span style="color: #f87171;">Invalid Syntax: <strong>${s.invalidCount}</strong></span>
+      <span style="color: #f87171;">Invalid Emails: <strong>${s.invalidCount}</strong></span>
     </div>
   `;
 }
@@ -339,9 +339,9 @@ async function commitImport() {
   };
 
   if (!mapping.email) {
-    alert('Please select an Email column mapping.');
+    alert('Please choose which column has the email addresses.');
     commitBtn.disabled = false;
-    commitBtn.textContent = 'Confirm & Import Contacts';
+    commitBtn.textContent = 'Finish Import';
     return;
   }
 
@@ -355,14 +355,14 @@ async function commitImport() {
     });
 
     closeModal('importModal');
-    showToast(res.message || 'Import complete!');
+    showToast(res.message || 'Contacts imported successfully!');
     await loadContacts();
     await loadGroups();
   } catch (err) {
     alert('Import failed: ' + err.message);
   } finally {
     commitBtn.disabled = false;
-    commitBtn.textContent = 'Confirm & Import Contacts';
+    commitBtn.textContent = 'Finish Import';
   }
 }
 
@@ -589,7 +589,7 @@ function renderSuppressionTable() {
     tableBody.innerHTML = `
       <tr>
         <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
-          No suppressed emails found.
+          No blocked emails found.
         </td>
       </tr>
     `;
@@ -605,13 +605,13 @@ function renderSuppressionTable() {
       reasonLabel = 'Unsubscribed';
     } else if (item.reason === 'hard_bounce') {
       reasonBadgeClass = 'badge-bounced';
-      reasonLabel = 'Hard Bounce';
+      reasonLabel = 'Invalid Address';
     } else if (item.reason === 'complaint') {
       reasonBadgeClass = 'badge-bounced';
-      reasonLabel = 'Complaint';
+      reasonLabel = 'Spam Report';
     } else if (item.reason === 'manual') {
       reasonBadgeClass = 'badge-group';
-      reasonLabel = 'Manual';
+      reasonLabel = 'Manual Block';
     }
 
     return `
@@ -633,7 +633,7 @@ function renderSuppressionTable() {
           </span>
         </td>
         <td style="text-align: right;">
-          <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="removeSuppression('${item.id}')" title="Remove from blacklist (allow sending)">
+          <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="removeSuppression('${item.id}')" title="Unblock this email address">
             🔓 Unblock
           </button>
         </td>
@@ -649,7 +649,7 @@ function updateSuppressionPagination() {
   const start = p.total === 0 ? 0 : (p.page - 1) * p.limit + 1;
   const end = Math.min(p.total, p.page * p.limit);
   const info = document.getElementById('suppPaginationInfo');
-  if (info) info.textContent = `Showing ${start} to ${end} of ${p.total} suppressed emails`;
+  if (info) info.textContent = `Showing ${start} to ${end} of ${p.total} blocked emails`;
 
   const prevBtn = document.getElementById('suppPrevPageBtn');
   const nextBtn = document.getElementById('suppNextPageBtn');
@@ -664,10 +664,10 @@ function openAddSuppressionModal() {
 }
 
 async function removeSuppression(id) {
-  if (!confirm('Are you sure you want to remove this email from the suppression list? It will be eligible for future campaigns.')) return;
+  if (!confirm('Are you sure you want to unblock this email address? It will be eligible to receive emails in future campaigns.')) return;
   try {
     await API.removeSuppressed(id);
-    showToast('Email removed from suppression list.');
+    showToast('Email unblocked successfully.');
     loadSuppressionStats();
     loadSuppressionList();
   } catch (err) {

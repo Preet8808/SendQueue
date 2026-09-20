@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings & Providers — SendQueue</title>
+  <title>Settings & Email Services — SendQueue</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <div class="brand-title">SendQueue</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Sender</div>
         </div>
         <span class="brand-badge">v1.0</span>
       </div>
@@ -69,10 +69,10 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="page-title">Delivery Infrastructure & Providers</div>
+        <div class="page-title">Email Services & Settings</div>
         <div class="top-actions">
           <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
-            <span>Multi-Provider Layer Active</span>
+            <span>Email System Ready</span>
           </div>
         </div>
       </header>
@@ -82,22 +82,22 @@
         <!-- Subnavigation Tabs -->
         <div style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
           <button class="btn btn-primary" id="tabBtn_delivery" onclick="switchSettingsTab('delivery')">
-            ⚡ Cloud Providers & Setup
+            ⚡ Choose Email Service
           </button>
           <button class="btn btn-secondary" id="tabBtn_testsend" onclick="switchSettingsTab('testsend')">
             ✉️ Send Test Email
           </button>
           <button class="btn btn-secondary" id="tabBtn_inbox" onclick="switchSettingsTab('inbox')">
-            📬 Virtual Test Inbox <span class="badge-group" id="mockInboxCount" style="margin-left: 6px;">0 captured</span>
+            📬 Test Inbox <span class="badge-group" id="mockInboxCount" style="margin-left: 6px;">0 saved</span>
           </button>
         </div>
 
         <!-- TAB 1: Cloud Providers & Credentials -->
         <div id="tabPane_delivery">
           <div style="margin-bottom: 20px;">
-            <h3 style="color: #fff; font-size: 1.1rem;">Select Active Dispatch Provider</h3>
+            <h3 style="color: #fff; font-size: 1.1rem;">Choose How Emails Are Sent</h3>
             <p style="color: var(--text-secondary); font-size: 0.82rem; margin-top: 2px;">
-              SendQueue dispatches all emails through your active provider. Select one to configure:
+              Choose the service you want SendQueue to send emails through. Select one below to configure:
             </p>
           </div>
 
@@ -108,25 +108,25 @@
 
           <!-- Provider Configuration Form -->
           <div class="card">
-            <h3 class="card-title" style="margin-bottom: 16px;">Delivery Configuration</h3>
+            <h3 class="card-title" style="margin-bottom: 16px;">Default Sender Information</h3>
 
             <form id="settingsForm">
               <!-- Default Sender -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
                 <div class="form-group">
-                  <label class="form-label" for="defaultFromName">Default Sender Name *</label>
-                  <input type="text" id="defaultFromName" class="form-control" placeholder="e.g. Acme Dispatcher" required>
+                  <label class="form-label" for="defaultFromName">Sender Name *</label>
+                  <input type="text" id="defaultFromName" class="form-control" placeholder="e.g. Your Company Name" required>
                 </div>
                 <div class="form-group">
-                  <label class="form-label" for="defaultFromEmail">Default Sender Email *</label>
-                  <input type="email" id="defaultFromEmail" class="form-control" placeholder="e.g. notifications@acme.com" required>
+                  <label class="form-label" for="defaultFromEmail">Sender Email *</label>
+                  <input type="email" id="defaultFromEmail" class="form-control" placeholder="e.g. hello@yourcompany.com" required>
                 </div>
               </div>
 
               <!-- Mock Config -->
               <div id="config_mock" style="display: none; margin-bottom: 20px;">
                 <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.85rem; color: #a7f3d0;">
-                  <strong>✓ Mock Provider Selected:</strong> No API keys or domain configuration required. All emails sent will be intercepted and safely stored in the <strong>Virtual Test Inbox</strong> tab for instant review.
+                  <strong>✓ Test Mode Selected:</strong> No setup required! Emails are not actually sent to real inboxes. Instead, they are saved in the <strong>Test Inbox</strong> tab so you can preview them safely.
                 </div>
               </div>
 
@@ -199,9 +199,9 @@
           <div class="card" style="max-width: 720px; margin: 0 auto;">
             <div class="card-header">
               <div>
-                <h3 class="card-title">Dispatch Test Email</h3>
+                <h3 class="card-title">Send a Test Email</h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
-                  Verify formatting and deliverability by sending a test message through your active provider.
+                  Send a quick test message to make sure your email looks good and delivers properly.
                 </p>
               </div>
             </div>
@@ -210,26 +210,26 @@
 
             <form id="testSendForm">
               <div class="form-group">
-                <label class="form-label" for="testRecipientEmail">Destination Test Email *</label>
-                <input type="email" id="testRecipientEmail" class="form-control" placeholder="your.personal.email@domain.com" required>
+                <label class="form-label" for="testRecipientEmail">Send Test To (Email Address) *</label>
+                <input type="email" id="testRecipientEmail" class="form-control" placeholder="your.email@domain.com" required>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="testTemplateSelect">Use Existing Template (optional):</label>
+                <label class="form-label" for="testTemplateSelect">Use a Saved Template (Optional):</label>
                 <select id="testTemplateSelect" class="form-control">
                   <!-- Injected via settings.js -->
                 </select>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Tokens will be automatically resolved with sample test recipient attributes.</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Tags like {{first_name}} will be filled in with sample test data.</p>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="testCustomSubject">Custom Subject (if not using template)</label>
-                <input type="text" id="testCustomSubject" class="form-control" placeholder="SendQueue Test Message — 2026 Delivery Validation">
+                <label class="form-label" for="testCustomSubject">Subject Line (if not using a template)</label>
+                <input type="text" id="testCustomSubject" class="form-control" placeholder="Test Message from SendQueue">
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="testCustomHtml">Custom HTML Message (if not using template)</label>
-                <textarea id="testCustomHtml" class="form-control" style="min-height: 120px; font-family: monospace;" placeholder="<h2>Hello from SendQueue!</h2><p>This confirms that your active provider delivery configuration is working perfectly.</p>"></textarea>
+                <label class="form-label" for="testCustomHtml">Email Message (HTML) (if not using a template)</label>
+                <textarea id="testCustomHtml" class="form-control" style="min-height: 120px; font-family: monospace;" placeholder="<h2>Hello from SendQueue!</h2><p>This confirms that your email sending configuration is working perfectly.</p>"></textarea>
               </div>
 
               <button type="submit" class="btn btn-primary" id="sendTestBtn" style="width: 100%; padding: 12px; font-size: 0.95rem;">
@@ -244,14 +244,14 @@
           <div class="card" style="padding: 0; overflow: hidden;">
             <div style="padding: 16px 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
               <div>
-                <h3 class="card-title">Virtual Test Inbox (Mock Captures)</h3>
+                <h3 class="card-title">Test Inbox</h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
-                  All messages sent when the Mock Provider is active are safely captured here without spending live credits.
+                  When Test Mode is selected, all sent emails appear here so you can review how they look for free.
                 </p>
               </div>
               <div style="display: flex; gap: 8px;">
                 <button class="btn btn-secondary" onclick="loadMockInbox()">🔄 Refresh</button>
-                <button class="btn btn-secondary" style="color: #fca5a5;" onclick="clearInbox()">🗑️ Clear Inbox</button>
+                <button class="btn btn-secondary" style="color: #fca5a5;" onclick="clearInbox()">🗑️ Delete All</button>
               </div>
             </div>
 
@@ -262,7 +262,7 @@
                     <th>Recipient</th>
                     <th>Subject</th>
                     <th>Sender</th>
-                    <th>Timestamp</th>
+                    <th>Sent At</th>
                     <th style="text-align: right;">Action</th>
                   </tr>
                 </thead>

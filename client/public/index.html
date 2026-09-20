@@ -18,7 +18,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <div class="brand-title">SendQueue</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Sender</div>
         </div>
         <span class="brand-badge">v1.0</span>
       </div>
@@ -64,18 +64,18 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="page-title">Overview Dashboard</div>
+        <div class="page-title">Dashboard</div>
         <div class="top-actions">
           <div class="status-pill" id="healthPill">
             <span class="pulse-dot"></span>
             <span id="healthText">Connecting...</span>
           </div>
           <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
-            <span>Active Provider:</span>
+            <span>Email Service:</span>
             <strong id="providerBadge">MOCK</strong>
           </div>
           <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; font-size: 0.82rem;">
-            + Launch Campaign
+            + New Campaign
           </a>
         </div>
       </header>
@@ -86,38 +86,38 @@
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Active Audience</span>
+              <span class="metric-label">Total Contacts</span>
               <span class="metric-icon">👥</span>
             </div>
             <div class="metric-value" id="metricContacts">0</div>
-            <div class="metric-meta" id="metricAudienceSub">Verified opt-in contacts</div>
+            <div class="metric-meta" id="metricAudienceSub">People in your contact list</div>
           </div>
 
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Queue Dispatched</span>
+              <span class="metric-label">Emails Sent</span>
               <span class="metric-icon">🚀</span>
             </div>
             <div class="metric-value" id="metricSent">0</div>
-            <div class="metric-meta" id="metricQueueSub">0 in-flight / pending</div>
+            <div class="metric-meta" id="metricQueueSub">0 waiting to send</div>
           </div>
 
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Delivery Success</span>
+              <span class="metric-label">Delivery Rate</span>
               <span class="metric-icon">📈</span>
             </div>
             <div class="metric-value" id="metricDeliveryRate">100%</div>
-            <div class="metric-meta" id="metricDeliverySub">0 confirmed deliveries</div>
+            <div class="metric-meta" id="metricDeliverySub">0 delivered safely</div>
           </div>
 
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Suppression Guard</span>
+              <span class="metric-label">Blocked Emails</span>
               <span class="metric-icon">🛡️</span>
             </div>
             <div class="metric-value" id="metricSuppressed">0</div>
-            <div class="metric-meta" id="metricSuppressedSub">0 bounces & unsubs blocked</div>
+            <div class="metric-meta" id="metricSuppressedSub">0 emails stopped safely</div>
           </div>
         </div>
 
@@ -127,9 +127,9 @@
           <div class="card" style="margin-bottom: 0;">
             <div class="card-header" style="margin-bottom: 16px;">
               <div>
-                <h2 class="card-title">Active Campaign Queues & Telemetry</h2>
+                <h2 class="card-title">Recent Campaigns</h2>
                 <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-                  Real-time status of current and recent message queues.
+                  Live status of your sent and scheduled emails.
                 </p>
               </div>
               <a href="/campaigns.html" class="btn btn-secondary" style="font-size: 0.78rem; text-decoration: none;">
@@ -139,7 +139,7 @@
 
             <div id="dashboardCampaignsList">
               <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-                Loading campaign queues...
+                Loading campaigns...
               </div>
             </div>
           </div>
@@ -148,21 +148,21 @@
           <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div class="card-header" style="margin-bottom: 16px;">
-                <h2 class="card-title">Dispatch Quick Actions</h2>
+                <h2 class="card-title">Quick Actions</h2>
               </div>
               
               <div style="display: flex; flex-direction: column; gap: 10px;">
                 <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; justify-content: center;">
-                  🚀 New Campaign Wizard
+                  🚀 Create New Campaign
                 </a>
                 <a href="/contacts.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
-                  📥 Import Contacts CSV
+                  📥 Upload Contacts (CSV File)
                 </a>
                 <a href="/templates.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
-                  📝 Edit Email Templates
+                  📝 Manage Email Templates
                 </a>
                 <a href="/settings.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
-                  ⚙️ Switch Provider (SES / Resend / SMTP)
+                  ⚙️ Email Sending Settings
                 </a>
               </div>
             </div>
@@ -170,16 +170,16 @@
             <!-- Health Snapshot Widget -->
             <div style="margin-top: 24px; padding: 14px; background: rgba(0,0,0,0.15); border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span style="color: var(--text-muted);">Runtime Memory:</span>
+                <span style="color: var(--text-muted);">Server Memory:</span>
                 <strong id="diagMemory" style="color: #fff;">—</strong>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                <span style="color: var(--text-muted);">System Uptime:</span>
+                <span style="color: var(--text-muted);">Running For:</span>
                 <strong id="diagUptime" style="color: #fff;">—</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--text-muted);">Rate Limiter Guard:</span>
-                <strong style="color: var(--success);">ACTIVE (Sliding Window)</strong>
+                <span style="color: var(--text-muted);">Spam & Rate Protection:</span>
+                <strong style="color: var(--success);">Active</strong>
               </div>
             </div>
           </div>
@@ -189,9 +189,9 @@
         <div class="card">
           <div class="card-header">
             <div>
-              <h2 class="card-title">System Architecture Milestones</h2>
+              <h2 class="card-title">Features & Setup Status</h2>
               <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-                Complete production architecture verified end-to-end.
+                All core features are built, tested, and ready to use.
               </p>
             </div>
             <span class="badge-active phase-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
@@ -203,56 +203,56 @@
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 1: Project Skeleton, Environment & Database Core</div>
-                <div class="phase-desc">Node.js + Express setup, native SQLite (WAL mode, foreign keys), schema initialization, JWT auth, and seed engine.</div>
+                <div class="phase-name">Section 1: Setup & Secure Database</div>
+                <div class="phase-desc">Fast local database storage, user login accounts, and system security.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 2: Contact Management, Groups & Smart CSV Importer</div>
-                <div class="phase-desc">Full CRUD for contacts, group segmentation, auto-detect column mapping CSV streaming parser, deduplication, and syntax validation.</div>
+                <div class="phase-name">Section 2: Contacts & Easy CSV Import</div>
+                <div class="phase-desc">Add, edit, and organize contacts into groups, with easy spreadsheet import.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 3: Template Studio & Live Dynamic Personalization Preview</div>
-                <div class="phase-desc">Rich template editor, dynamic token fallback parser (<code>{{name | 'Friend'}}</code>), and side-by-side live preview.</div>
+                <div class="phase-name">Section 3: Email Templates & Live Preview</div>
+                <div class="phase-desc">Design beautiful emails with personal greeting tags (like Hi {{name}}) and instant preview.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 4: Multi-Provider Email Dispatcher & Test Sending</div>
-                <div class="phase-desc">Pluggable adapter layer: Mock Virtual Inbox (offline zero-cost), Resend, Amazon SES, SendGrid, and standard SMTP.</div>
+                <div class="phase-name">Section 4: Email Services & Testing</div>
+                <div class="phase-desc">Connect to popular email services (Resend, SES, SendGrid, SMTP) or test for free.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 5: Queue Engine, Rate Limiter & Campaign Orchestrator</div>
-                <div class="phase-desc">Token bucket rate regulation, atomic database state transitions, exponential backoff retries, and crash resumption.</div>
+                <div class="phase-name">Section 5: Smart Sending Queue</div>
+                <div class="phase-desc">Controls sending speed automatically so your emails never get flagged as spam.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 6: Compliance, Webhooks & Delivery Analytics</div>
-                <div class="phase-desc">RFC 8058 one-click unsubscribe, global suppression manager, provider webhook ingestion, and real-time SSE telemetry tracker.</div>
+                <div class="phase-name">Section 6: Unsubscribe & Live Tracking</div>
+                <div class="phase-desc">Safe one-click unsubscribe links, blocked email list, and live delivery updates.</div>
               </div>
             </div>
 
             <div class="phase-item completed">
               <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
-                <div class="phase-name">Phase 7: Frontend Polish, Live Telemetry & Production Hardening</div>
-                <div class="phase-desc">Enriched KPI telemetry, persistent Dark/Light theme mode, public API rate limiting, and system health diagnostics.</div>
+                <div class="phase-name">Section 7: Easy Design & System Health</div>
+                <div class="phase-desc">Clean look, dark/light mode switch, spam protection, and live server stats.</div>
               </div>
             </div>
           </div>
@@ -283,9 +283,9 @@
       try {
         const health = await API.getHealth();
         if (health.status === 'healthy') {
-          document.getElementById('healthText').textContent = `Live: SQLite (${health.database})`;
+          document.getElementById('healthText').textContent = 'System Online';
           if (health.system) {
-            document.getElementById('diagMemory').textContent = `${health.system.memory.heapUsedMb} MB Heap`;
+            document.getElementById('diagMemory').textContent = `${health.system.memory.heapUsedMb} MB`;
             const mins = Math.floor(health.system.uptimeSec / 60);
             const hrs = Math.floor(mins / 60);
             document.getElementById('diagUptime').textContent = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m ${health.system.uptimeSec % 60}s`;
@@ -308,16 +308,16 @@
           const q = s.queue || {};
 
           document.getElementById('metricContacts').textContent = s.contacts ?? 0;
-          document.getElementById('metricAudienceSub').textContent = `${s.groups ?? 0} contact groups assigned`;
+          document.getElementById('metricAudienceSub').textContent = `${s.groups ?? 0} contact groups created`;
 
           document.getElementById('metricSent').textContent = q.sent ?? 0;
-          document.getElementById('metricQueueSub').textContent = `${q.pending ?? 0} in-flight / queued`;
+          document.getElementById('metricQueueSub').textContent = `${q.pending ?? 0} waiting to send`;
 
           document.getElementById('metricDeliveryRate').textContent = `${q.deliveryRate ?? 100}%`;
-          document.getElementById('metricDeliverySub').textContent = `${q.delivered ?? 0} confirmed delivered`;
+          document.getElementById('metricDeliverySub').textContent = `${q.delivered ?? 0} delivered safely`;
 
           document.getElementById('metricSuppressed').textContent = s.suppressed ?? 0;
-          document.getElementById('metricSuppressedSub').textContent = `${q.bounced ?? 0} bounced & unsubs`;
+          document.getElementById('metricSuppressedSub').textContent = `${q.bounced ?? 0} stopped safely`;
 
           document.getElementById('providerBadge').textContent = (s.activeProvider || 'Mock').toUpperCase();
 
@@ -335,7 +335,7 @@
       if (campaigns.length === 0) {
         container.innerHTML = `
           <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-            No campaigns created yet. Click <strong>+ Launch Campaign</strong> above to dispatch your first queue!
+            No campaigns yet. Click <strong>+ New Campaign</strong> above to send your first email!
           </div>
         `;
         return;
@@ -358,12 +358,12 @@
                 <span class="status-pill" style="font-size: 0.68rem; padding: 2px 8px; margin-left: 8px; color: ${statusColor}; border-color: ${statusColor};">${c.status}</span>
               </div>
               <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 3px 8px; font-size: 0.72rem; text-decoration: none;">
-                📡 View Telemetry
+                📊 View Progress
               </a>
             </div>
 
             <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
-              <span>Dispatched: <strong style="color: #fff;">${c.sent_count || 0} / ${c.total_recipients || 0}</strong></span>
+              <span>Sent: <strong style="color: #fff;">${c.sent_count || 0} / ${c.total_recipients || 0}</strong></span>
               <span>Delivered: <strong style="color: #34d399;">${c.delivered_count || 0}</strong></span>
               <span>${percent}%</span>
             </div>

@@ -100,9 +100,9 @@ function renderCampaignCards() {
         <div style="font-size: 3rem; margin-bottom: 12px;">🚀</div>
         <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 6px;">No campaigns created yet</h3>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
-          Launch your first rate-controlled bulk email dispatch in seconds.
+          Send your first email campaign to your contacts in just a few steps.
         </p>
-        <button class="btn btn-primary" onclick="openWizardModal()">+ Create First Campaign</button>
+        <button class="btn btn-primary" onclick="openWizardModal()">+ Create Your First Campaign</button>
       </div>
     `;
     return;
@@ -143,11 +143,11 @@ function renderCampaignCards() {
           </div>
           <div style="display: flex; gap: 8px;">
             <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 5px 12px; font-size: 0.78rem; text-decoration: none; display: flex; align-items: center; gap: 4px;">
-              📡 Live Telemetry
+              📊 Live Tracker
             </a>
             ${actionButtons}
             <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="openQueueInspector('${c.id}')">
-              🔍 Inspect Queue
+              🔍 View Email List
             </button>
           </div>
         </div>
@@ -155,7 +155,7 @@ function renderCampaignCards() {
         <!-- Animated Progress Bar -->
         <div style="margin: 16px 0 12px 0;">
           <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
-            <span style="color: var(--text-muted);">Queue Dispatch Progress</span>
+            <span style="color: var(--text-muted);">Sending Progress</span>
             <span style="color: #fff; font-weight: 600;">${percent}% (${c.sent_count} / ${c.total_recipients} sent)</span>
           </div>
           <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-full); overflow: hidden;">
@@ -169,8 +169,8 @@ function renderCampaignCards() {
           <div><span style="color: var(--text-muted);">Sent:</span> <strong style="color: #38bdf8;">${c.sent_count}</strong></div>
           <div><span style="color: var(--text-muted);">Delivered:</span> <strong style="color: #34d399;">${c.delivered_count || 0}</strong></div>
           <div><span style="color: var(--text-muted);">Bounced:</span> <strong style="color: #f87171;">${c.bounced_count || 0}</strong></div>
-          <div><span style="color: var(--text-muted);">Pending:</span> <strong style="color: #a5b4fc;">${c.pending_count}</strong></div>
-          <div><span style="color: var(--text-muted);">Rate:</span> <strong style="color: #fff;">${c.rate_limit_per_sec} msg/sec</strong></div>
+          <div><span style="color: var(--text-muted);">Waiting:</span> <strong style="color: #a5b4fc;">${c.pending_count}</strong></div>
+          <div><span style="color: var(--text-muted);">Speed:</span> <strong style="color: #fff;">${c.rate_limit_per_sec} emails / sec</strong></div>
           <div style="margin-left: auto; color: var(--text-muted); font-size: 0.75rem;">Created: ${new Date(c.created_at).toLocaleString()}</div>
         </div>
       </div>
@@ -200,7 +200,7 @@ async function resumeCampaign(id) {
 }
 
 async function cancelCampaign(id) {
-  if (!confirm('Are you sure you want to cancel remaining unsent emails in this campaign?')) return;
+  if (!confirm('Are you sure you want to cancel the remaining unsent emails for this campaign?')) return;
   try {
     await API.cancelCampaign(id);
     showToast('Campaign cancelled.');
@@ -301,7 +301,7 @@ function renderWizardTemplatesDropdown() {
   const select = document.getElementById('wizTemplateSelect');
   if (!select) return;
 
-  select.innerHTML = '<option value="">(Custom Email Body / No Template)</option>' +
+  select.innerHTML = '<option value="">(Write from scratch without a template)</option>' +
     state.templates.map(t => `<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('');
 
   select.addEventListener('change', (e) => {
@@ -383,7 +383,7 @@ function buildLaunchSummary() {
 async function launchCampaign() {
   const launchBtn = document.getElementById('wizLaunchBtn');
   launchBtn.disabled = true;
-  launchBtn.textContent = 'Enqueuing & Launching...';
+  launchBtn.textContent = 'Starting campaign...';
 
   const name = document.getElementById('wizCampaignName').value.trim();
   const from_name = document.getElementById('wizFromName').value.trim();
@@ -411,13 +411,13 @@ async function launchCampaign() {
   try {
     const res = await API.createCampaign(payload);
     closeModal('campaignWizardModal');
-    showToast(`Campaign "${name}" queued! ${res.campaign.total_recipients} recipients enrolled.`);
+    showToast(`Campaign "${name}" started! Sending to ${res.campaign.total_recipients} contacts.`);
     await loadCampaigns();
   } catch (err) {
     alert('Failed to launch campaign: ' + err.message);
   } finally {
     launchBtn.disabled = false;
-    launchBtn.textContent = '🚀 Launch Campaign Now';
+    launchBtn.textContent = '🚀 Send Campaign Now';
   }
 }
 

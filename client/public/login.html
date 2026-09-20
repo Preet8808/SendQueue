@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In & Register — SendQueue</title>
+  <title>Sign In & Create Account — SendQueue</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,7 +80,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <h1 class="brand-title" style="font-size: 1.35rem;">SendQueue</h1>
-          <p style="font-size: 0.78rem; color: var(--text-secondary);">Email Dispatch & Queue Platform</p>
+          <p style="font-size: 0.78rem; color: var(--text-secondary);">Simple & Reliable Email Sender</p>
         </div>
       </div>
 
@@ -117,7 +117,7 @@
         </div>
 
         <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 8px;">
-          Sign In to Dashboard
+          Sign In
         </button>
 
         <div style="margin-top: 18px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
@@ -138,7 +138,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="regPassword">Password (minimum 6 characters)</label>
+          <label class="form-label" for="regPassword">Password (at least 6 characters)</label>
           <div class="password-input-wrap">
             <input type="password" id="regPassword" class="form-control" placeholder="••••••••" minlength="6" required autocomplete="new-password">
             <button type="button" class="password-toggle-btn" onclick="togglePassword('regPassword', this)" title="Show password" aria-label="Toggle password visibility">
@@ -164,11 +164,11 @@
         </div>
 
         <div style="font-size: 0.76rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 16px;">
-          ℹ️ New accounts are registered with standard <strong>Member</strong> privileges.
+          ℹ️ New accounts are created as regular members.
         </div>
 
         <button type="submit" id="regSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;">
-          Create Member Account
+          Create Account
         </button>
 
         <div style="margin-top: 18px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
@@ -242,7 +242,7 @@
       alertBox.textContent = '';
       const submitBtn = document.getElementById('loginSubmitBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Authenticating...';
+      submitBtn.textContent = 'Signing in...';
 
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
@@ -250,7 +250,7 @@
       try {
         await API.login(email, password);
         alertBox.className = 'alert-box alert-success show';
-        alertBox.textContent = 'Login successful! Redirecting...';
+        alertBox.textContent = 'Signed in! Opening dashboard...';
         setTimeout(() => {
           window.location.href = '/';
         }, 400);
@@ -258,7 +258,7 @@
         alertBox.className = 'alert-box alert-danger show';
         alertBox.textContent = err.message || 'Invalid email or password';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Sign In to Dashboard';
+        submitBtn.textContent = 'Sign In';
       }
     });
 
@@ -277,7 +277,7 @@
       // Check passwords match
       if (password !== confirmPassword) {
         alertBox.className = 'alert-box alert-danger show';
-        alertBox.textContent = 'Passwords do not match. Please verify and re-type.';
+        alertBox.textContent = 'Passwords do not match. Please check and try again.';
         document.getElementById('regConfirmPassword').focus();
         return;
       }
@@ -288,7 +288,7 @@
       try {
         const res = await API.register(name, email, password);
         alertBox.className = 'alert-box alert-success show';
-        alertBox.textContent = `Welcome, ${res.user?.name || name}! Account created as Member. Redirecting...`;
+        alertBox.textContent = `Welcome, ${res.user?.name || name}! Your account is ready. Opening dashboard...`;
         setTimeout(() => {
           window.location.href = '/';
         }, 600);
@@ -296,7 +296,7 @@
         alertBox.className = 'alert-box alert-danger show';
         alertBox.textContent = err.message || 'Failed to create account.';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Create Member Account';
+        submitBtn.textContent = 'Create Account';
       }
     });
   </script>

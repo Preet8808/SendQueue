@@ -71,7 +71,7 @@ function startEventStream() {
       pill.style.borderColor = 'rgba(52, 211, 153, 0.4)';
       pill.style.color = '#34d399';
     }
-    if (statusText) statusText.textContent = 'Live SSE Connected';
+    if (statusText) statusText.textContent = 'Live Updates Connected';
   };
 
   eventSource.onmessage = (e) => {
@@ -111,11 +111,11 @@ function renderCampaignHeader(c) {
   const createdEl = document.getElementById('campaignCreated');
   const statusPill = document.getElementById('campaignStatusPill');
 
-  if (pageTitle) pageTitle.textContent = `${c.name} — Telemetry`;
+  if (pageTitle) pageTitle.textContent = `${c.name} — Live Progress`;
   if (subjectEl) subjectEl.textContent = c.subject;
   if (senderEl) senderEl.textContent = `${c.from_name} <${c.from_email}>`;
-  if (templateEl) templateEl.textContent = c.template_name || '(Custom HTML)';
-  if (rateEl) rateEl.textContent = `${c.rate_limit_per_sec || 5} msg/sec`;
+  if (templateEl) templateEl.textContent = c.template_name || '(Custom Message)';
+  if (rateEl) rateEl.textContent = `${c.rate_limit_per_sec || 5} emails / sec`;
   if (createdEl) createdEl.textContent = new Date(c.created_at).toLocaleString();
 
   if (statusPill) {
@@ -146,7 +146,7 @@ function renderControls(c) {
     html += `<button class="btn btn-primary" onclick="resumeCurrent()" style="font-size: 0.8rem;">▶ Resume</button>`;
     html += `<button class="btn btn-secondary" onclick="cancelCurrent()" style="font-size: 0.8rem; color: #f87171;">⏹ Cancel</button>`;
   } else if (c.status === 'COMPLETED') {
-    html += `<span style="font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px;">✓ Queue Finished</span>`;
+    html += `<span style="font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px;">✓ All Emails Sent</span>`;
   }
 
   container.innerHTML = html;
@@ -172,7 +172,7 @@ function renderMetrics(c) {
   setText('metricBounced', bounced);
   setText('metricBounceRate', `${c.bounceRate || 0}%`);
   setText('metricUnsub', unsubscribed);
-  setText('metricComplaints', `${complained} complaints`);
+  setText('metricComplaints', `${complained} reports`);
   setText('metricPending', pending);
 
   // Progress Bar
@@ -229,7 +229,7 @@ async function loadRecipients() {
     state.recipients = res.recipients || [];
 
     if (state.recipients.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 24px; color: var(--text-muted);">No recipients match this status filter.</td></tr>';
+      tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 24px; color: var(--text-muted);">No contacts found with this status.</td></tr>';
       return;
     }
 
@@ -244,7 +244,7 @@ async function loadRecipients() {
       else if (r.status === 'FAILED') statusColor = '#f87171';
       else if (r.status === 'RETRY') statusColor = '#f59e0b';
 
-      const activityText = r.error_message || (r.delivered_at ? `Delivered at ${new Date(r.delivered_at).toLocaleTimeString()}` : (r.sent_at ? `Sent at ${new Date(r.sent_at).toLocaleTimeString()}` : 'In queue'));
+      const activityText = r.error_message || (r.delivered_at ? `Delivered at ${new Date(r.delivered_at).toLocaleTimeString()}` : (r.sent_at ? `Sent at ${new Date(r.sent_at).toLocaleTimeString()}` : 'Waiting to send'));
 
       return `
         <tr>

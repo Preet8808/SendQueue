@@ -18,7 +18,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <div class="brand-title">SendQueue</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Sender</div>
         </div>
         <span class="brand-badge">v1.0</span>
       </div>
@@ -67,7 +67,7 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="page-title">Audience & Contact Management</div>
+        <div class="page-title">Contacts & Groups</div>
         <div class="top-actions">
           <button class="btn btn-secondary" onclick="openGroupManagerModal()">
             📁 Manage Groups
@@ -86,10 +86,10 @@
         <!-- View Switcher Tabs -->
         <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
           <button id="tabContactsBtn" class="btn btn-primary" onclick="switchView('contacts')" style="display: flex; align-items: center; gap: 6px;">
-            <span>👥</span> Contacts & Audiences
+            <span>👥</span> All Contacts
           </button>
           <button id="tabSuppressionBtn" class="btn btn-secondary" onclick="switchView('suppression')" style="display: flex; align-items: center; gap: 6px;">
-            <span>🚫</span> Global Suppression List
+            <span>🚫</span> Blocked Emails
           </button>
         </div>
 
@@ -149,7 +149,7 @@
           <!-- Suppression Stats Cards -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;">
             <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Suppressed</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Blocked</div>
               <div style="font-size: 1.4rem; font-weight: 700; color: #fff;" id="suppStatTotal">0</div>
             </div>
             <div class="card" style="padding: 12px 16px;">
@@ -157,15 +157,15 @@
               <div style="font-size: 1.4rem; font-weight: 700; color: #c084fc;" id="suppStatUnsub">0</div>
             </div>
             <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #ef4444; text-transform: uppercase;">Hard Bounces</div>
+              <div style="font-size: 0.72rem; color: #ef4444; text-transform: uppercase;">Invalid Addresses</div>
               <div style="font-size: 1.4rem; font-weight: 700; color: #f87171;" id="suppStatBounce">0</div>
             </div>
             <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #f59e0b; text-transform: uppercase;">Complaints</div>
+              <div style="font-size: 0.72rem; color: #f59e0b; text-transform: uppercase;">Spam Reports</div>
               <div style="font-size: 1.4rem; font-weight: 700; color: #fbbf24;" id="suppStatComplaint">0</div>
             </div>
             <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #38bdf8; text-transform: uppercase;">Manual Blacklist</div>
+              <div style="font-size: 0.72rem; color: #38bdf8; text-transform: uppercase;">Manually Blocked</div>
               <div style="font-size: 1.4rem; font-weight: 700; color: #7dd3fc;" id="suppStatManual">0</div>
             </div>
           </div>
@@ -174,22 +174,22 @@
           <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
             <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
               <div style="flex: 1; min-width: 240px;">
-                <input type="text" id="suppressionSearchInput" class="form-control" placeholder="🔍 Search blacklisted email address...">
+                <input type="text" id="suppressionSearchInput" class="form-control" placeholder="🔍 Search blocked email address...">
               </div>
               <div style="width: 180px;">
                 <select id="suppressionReasonFilter" class="form-control" onchange="loadSuppressionList()">
                   <option value="">All Reasons</option>
                   <option value="unsubscribe">Unsubscribed</option>
-                  <option value="hard_bounce">Hard Bounce</option>
-                  <option value="complaint">Complaint</option>
-                  <option value="manual">Manual</option>
+                  <option value="hard_bounce">Invalid Address (Bounce)</option>
+                  <option value="complaint">Spam Report</option>
+                  <option value="manual">Manual Block</option>
                 </select>
               </div>
               <button class="btn btn-secondary" onclick="loadSuppressionList()">
                 🔄 Refresh
               </button>
               <button class="btn btn-primary" onclick="openAddSuppressionModal()">
-                + Add to Blacklist
+                + Block an Email
               </button>
             </div>
           </div>
@@ -201,8 +201,8 @@
                 <thead>
                   <tr>
                     <th>Email Address</th>
-                    <th>Suppression Reason</th>
-                    <th>Source Campaign</th>
+                    <th>Why Blocked</th>
+                    <th>From Campaign</th>
                     <th>Added On</th>
                     <th style="text-align: right;">Action</th>
                   </tr>
@@ -215,7 +215,7 @@
 
             <!-- Pagination Bar -->
             <div class="pagination-bar">
-              <span id="suppPaginationInfo">Showing 0 to 0 of 0 suppressed emails</span>
+              <span id="suppPaginationInfo">Showing 0 to 0 of 0 blocked emails</span>
               <div style="display: flex; gap: 8px;">
                 <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="suppPrevPageBtn">Previous</button>
                 <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="suppNextPageBtn">Next</button>
@@ -260,8 +260,8 @@
               <input type="text" id="contactCompany" class="form-control" placeholder="Acme Corp">
             </div>
             <div class="form-group">
-              <label class="form-label" for="contactCategory">Category / Segment</label>
-              <input type="text" id="contactCategory" class="form-control" placeholder="Enterprise">
+              <label class="form-label" for="contactCategory">Category / Tag</label>
+              <input type="text" id="contactCategory" class="form-control" placeholder="VIP Customer">
             </div>
           </div>
 
@@ -293,7 +293,7 @@
   <div class="modal-overlay" id="importModal">
     <div class="modal-window" style="max-width: 650px;">
       <div class="modal-header">
-        <h3 class="modal-title">Smart CSV Importer</h3>
+        <h3 class="modal-title">Upload Contacts (CSV File)</h3>
         <button class="modal-close" onclick="closeModal('importModal')">&times;</button>
       </div>
       <div class="modal-body">
@@ -303,9 +303,9 @@
         <div id="importStep1">
           <div class="dropzone" id="csvDropzone">
             <div class="dropzone-icon">📥</div>
-            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 6px;">Select or Drop CSV File</h4>
+            <h4 style="color: #fff; font-size: 1rem; margin-bottom: 6px;">Choose or Drag & Drop a CSV File</h4>
             <p style="color: var(--text-secondary); font-size: 0.82rem;" id="dropzoneText">
-              Supports CSV files with headers like Email, Name, Company, etc. (up to 15MB)
+              Works with spreadsheet files (.csv) containing columns like Email, Name, Company (up to 15MB)
             </p>
             <input type="file" id="csvFileInput" accept=".csv,text/csv" style="display: none;">
           </div>
@@ -315,13 +315,13 @@
         <div id="importStep2" style="display: none;">
           <div id="importStatsBanner" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.82rem;"></div>
 
-          <h4 style="font-size: 0.92rem; color: #fff; margin-bottom: 12px;">Confirm Column Mapping:</h4>
+          <h4 style="font-size: 0.92rem; color: #fff; margin-bottom: 12px;">Match Spreadsheet Columns:</h4>
           <div id="mappingFieldsContainer">
             <!-- Injected by contacts.js -->
           </div>
 
           <div class="form-group" style="margin-top: 20px;">
-            <label class="form-label" for="importTargetGroup">Add Imported Contacts to Group:</label>
+            <label class="form-label" for="importTargetGroup">Add imported contacts to a group (optional):</label>
             <select id="importTargetGroup" class="form-control">
               <!-- Injected by contacts.js -->
             </select>
@@ -331,13 +331,13 @@
         <!-- Step 3: Success Result -->
         <div id="importStep3" style="display: none; text-align: center; padding: 30px;">
           <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
-          <h3 style="color: #fff;" id="importSuccessTitle">Import Completed!</h3>
+          <h3 style="color: #fff;" id="importSuccessTitle">Contacts Imported Successfully!</h3>
           <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px;" id="importSuccessDesc"></p>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="closeModal('importModal')">Close</button>
-        <button type="button" class="btn btn-primary" id="commitImportBtn" style="display: none;" onclick="commitImport()">Confirm & Import Contacts</button>
+        <button type="button" class="btn btn-primary" id="commitImportBtn" style="display: none;" onclick="commitImport()">Finish Import</button>
       </div>
     </div>
   </div>
@@ -358,7 +358,7 @@
             </div>
             <div style="flex: 1;">
               <label class="form-label">Description (optional)</label>
-              <input type="text" id="newGroupDesc" class="form-control" placeholder="e.g. Q4 Wholesale contacts">
+              <input type="text" id="newGroupDesc" class="form-control" placeholder="e.g. Wholesale contacts">
             </div>
             <button type="submit" class="btn btn-primary" style="height: 42px;">+ Add</button>
           </div>
@@ -373,17 +373,19 @@
         <button type="button" class="btn btn-secondary" onclick="closeModal('groupManagerModal')">Done</button>
       </div>
     </div>
+  </div>
+
   <!-- Modal: Add to Suppression List -->
   <div class="modal-overlay" id="addSuppressionModal">
     <div class="modal-window" style="max-width: 460px;">
       <div class="modal-header">
-        <h3 class="modal-title">Add Email to Suppression List</h3>
+        <h3 class="modal-title">Block an Email Address</h3>
         <button class="modal-close" onclick="closeModal('addSuppressionModal')">&times;</button>
       </div>
       <form id="addSuppressionForm">
         <div class="modal-body">
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
-            Blacklisted emails will be permanently skipped during all campaign queue expansions, preserving your sender reputation.
+            Blocked emails will never be sent any messages. This keeps your sender reputation clean and safe.
           </p>
           <div class="form-group">
             <label class="form-label" for="suppressEmail">Email Address *</label>
@@ -392,16 +394,16 @@
           <div class="form-group">
             <label class="form-label" for="suppressReason">Reason</label>
             <select id="suppressReason" class="form-control">
-              <option value="manual">Manual Blacklist / Do Not Contact</option>
-              <option value="unsubscribe">User Opt-out / Unsubscribe</option>
-              <option value="hard_bounce">Hard Bounce (Invalid Mailbox)</option>
-              <option value="complaint">Spam Complaint</option>
+              <option value="manual">Manual Block (Do Not Contact)</option>
+              <option value="unsubscribe">User Unsubscribed</option>
+              <option value="hard_bounce">Bounced (Email does not exist)</option>
+              <option value="complaint">Spam Report</option>
             </select>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeModal('addSuppressionModal')">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add to Suppression</button>
+          <button type="submit" class="btn btn-primary">Block This Email</button>
         </div>
       </form>
     </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Campaign Telemetry & Tracker — SendQueue</title>
+  <title>Campaign Progress & Results — SendQueue</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,7 +113,7 @@
         <div class="brand-icon">⚡</div>
         <div>
           <div class="brand-title">SendQueue</div>
-          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Sender</div>
         </div>
         <span class="brand-badge">v1.0</span>
       </div>
@@ -163,17 +163,17 @@
           <a href="/campaigns.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
             ← Back to Campaigns
           </a>
-          <div class="page-title" id="pageCampaignName">Campaign Telemetry</div>
+          <div class="page-title" id="pageCampaignName">Campaign Progress</div>
         </div>
 
         <div class="top-actions">
           <div class="status-pill" id="liveConnectionPill">
             <span class="pulse-dot"></span>
-            <span id="liveStatusText">Live SSE Stream</span>
+            <span id="liveStatusText">Live Updates On</span>
           </div>
 
           <button class="btn btn-secondary" onclick="openSimulateModal()" style="font-size: 0.82rem;">
-            🧪 Test Webhook Event
+            🧪 Simulate Test Event
           </button>
           
           <div id="campaignControls" style="display: flex; gap: 8px;">
@@ -202,7 +202,7 @@
             <!-- Overall Dispatch Progress Bar -->
             <div style="min-width: 260px; max-width: 340px; width: 100%;">
               <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
-                <span style="color: var(--text-muted);">Queue Completion</span>
+                <span style="color: var(--text-muted);">Overall Progress</span>
                 <span id="progressPercentText" style="color: #fff; font-weight: 700;">0%</span>
               </div>
               <div style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-full); overflow: hidden;">
@@ -215,38 +215,38 @@
         <!-- 6 Telemetry Metrics Cards -->
         <div class="telemetry-grid">
           <div class="metric-card">
-            <div class="metric-label">Audience Target</div>
+            <div class="metric-label">Total People</div>
             <div class="metric-value" id="metricTotal">0</div>
           </div>
           <div class="metric-card sent">
-            <div class="metric-label">Dispatched (Sent)</div>
+            <div class="metric-label">Emails Sent</div>
             <div class="metric-value">
               <span id="metricSent">0</span>
             </div>
           </div>
           <div class="metric-card delivered">
-            <div class="metric-label">Delivered</div>
+            <div class="metric-label">Delivered Successfully</div>
             <div class="metric-value">
               <span id="metricDelivered">0</span>
               <span class="metric-sub good" id="metricDeliveryRate">0%</span>
             </div>
           </div>
           <div class="metric-card bounced">
-            <div class="metric-label">Bounced</div>
+            <div class="metric-label">Bounced (Failed)</div>
             <div class="metric-value">
               <span id="metricBounced">0</span>
               <span class="metric-sub bad" id="metricBounceRate">0%</span>
             </div>
           </div>
           <div class="metric-card unsub">
-            <div class="metric-label">Unsubs / Complaints</div>
+            <div class="metric-label">Unsubscribed / Spam Reports</div>
             <div class="metric-value">
               <span id="metricUnsub">0</span>
-              <span class="metric-sub" style="color: var(--warning);" id="metricComplaints">0 comp</span>
+              <span class="metric-sub" style="color: var(--warning);" id="metricComplaints">0 reports</span>
             </div>
           </div>
           <div class="metric-card pending">
-            <div class="metric-label">Pending / In Queue</div>
+            <div class="metric-label">Waiting to Send</div>
             <div class="metric-value" id="metricPending">0</div>
           </div>
         </div>
@@ -258,14 +258,14 @@
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="pulse-dot"></span>
-                <strong style="color: #fff; font-size: 0.92rem;">Real-Time Activity Feed</strong>
+                <strong style="color: #fff; font-size: 0.92rem;">Live Activity</strong>
               </div>
-              <span style="font-size: 0.72rem; color: var(--text-muted);">Auto-updating via SSE</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Updates automatically</span>
             </div>
 
             <div class="stream-feed" id="liveStreamFeed">
               <div style="color: var(--text-muted); text-align: center; margin: auto;">
-                Waiting for delivery telemetry events...
+                Waiting for email activity...
               </div>
             </div>
           </div>
@@ -273,17 +273,17 @@
           <!-- Right: Recipient Status Explorer -->
           <div class="card" style="display: flex; flex-direction: column;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-              <strong style="color: #fff; font-size: 0.95rem;">Queue Recipients Breakdown</strong>
+              <strong style="color: #fff; font-size: 0.95rem;">List of Recipients</strong>
               
               <div style="display: flex; gap: 8px;">
                 <select id="recipientStatusFilter" onchange="loadRecipients()" style="padding: 4px 10px; font-size: 0.78rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff;">
                   <option value="">All Statuses</option>
                   <option value="DELIVERED">Delivered</option>
-                  <option value="SENT">Sent (Awaiting confirmation)</option>
+                  <option value="SENT">Sent (Waiting for confirmation)</option>
                   <option value="BOUNCED">Bounced</option>
                   <option value="UNSUBSCRIBED">Unsubscribed</option>
-                  <option value="COMPLAINED">Complained</option>
-                  <option value="PENDING">Pending</option>
+                  <option value="COMPLAINED">Spam Report</option>
+                  <option value="PENDING">Waiting to send</option>
                   <option value="FAILED">Failed</option>
                 </select>
                 <button class="btn btn-secondary" onclick="loadRecipients()" style="padding: 4px 10px; font-size: 0.78rem;">
@@ -298,13 +298,13 @@
                   <tr>
                     <th>Recipient</th>
                     <th>Status</th>
-                    <th>Attempts</th>
-                    <th>Activity / Diagnostics</th>
+                    <th>Tries</th>
+                    <th>Delivery Status & Time</th>
                   </tr>
                 </thead>
                 <tbody id="recipientsTableBody">
                   <tr>
-                    <td colspan="4" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading recipient queue...</td>
+                    <td colspan="4" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading recipients...</td>
                   </tr>
                 </tbody>
               </table>
@@ -320,37 +320,37 @@
   <div class="modal" id="simulateModal">
     <div class="modal-dialog" style="max-width: 480px;">
       <div class="modal-header">
-        <h3 class="modal-title">Simulate Provider Webhook</h3>
+        <h3 class="modal-title">Simulate Delivery Event</h3>
         <button class="modal-close" onclick="closeModal('simulateModal')">&times;</button>
       </div>
       <div class="modal-body">
         <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
-          Inject a synthetic webhook event into SendQueue to test delivery, bounce suppression, or spam complaint handlers instantly.
+          Test what happens when an email is delivered, bounces, or is marked as spam.
         </p>
 
         <div class="form-group">
-          <label class="form-label">Select Event Type</label>
+          <label class="form-label">Event Type</label>
           <select id="simEventType" class="form-control">
-            <option value="DELIVERED">DELIVERED (Provider confirmed delivery)</option>
-            <option value="BOUNCE">BOUNCE (Hard bounce - triggers suppression)</option>
-            <option value="COMPLAINT">COMPLAINT (Spam complaint - triggers suppression)</option>
-            <option value="UNSUBSCRIBE">UNSUBSCRIBE (User opted out)</option>
+            <option value="DELIVERED">Delivered (Email reached inbox)</option>
+            <option value="BOUNCE">Bounced (Email address does not exist - added to blocked list)</option>
+            <option value="COMPLAINT">Spam Report (User clicked 'Report Spam' - added to blocked list)</option>
+            <option value="UNSUBSCRIBE">Unsubscribed (User clicked unsubscribe link)</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Target Recipient Email</label>
-          <input type="email" id="simEmail" class="form-control" placeholder="recipient@example.com (or select from list)">
+          <label class="form-label">Recipient Email</label>
+          <input type="email" id="simEmail" class="form-control" placeholder="recipient@example.com">
         </div>
 
         <div class="form-group">
-          <label class="form-label">Diagnostics / Reason (Optional)</label>
-          <input type="text" id="simReason" class="form-control" placeholder="e.g., 550 Mailbox does not exist">
+          <label class="form-label">Reason or Notes (Optional)</label>
+          <input type="text" id="simReason" class="form-control" placeholder="e.g. Mailbox does not exist">
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('simulateModal')">Cancel</button>
-        <button class="btn btn-primary" onclick="submitSimulation()">Emit Webhook Event</button>
+        <button class="btn btn-primary" onclick="submitSimulation()">Send Test Event</button>
       </div>
     </div>
   </div>

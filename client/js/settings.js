@@ -72,7 +72,7 @@ function renderProviderCards(settings) {
         </div>
         <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 12px;">${escapeHtml(p.description)}</p>
         <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; width: 100%;" onclick="event.stopPropagation(); verifyProviderCredentials('${p.id}')">
-          ⚡ Verify Connection
+          ⚡ Test Connection
         </button>
       </div>
     `;
@@ -128,12 +128,12 @@ async function verifyProviderCredentials(providerName) {
   try {
     const res = await API.verifyProvider({ providerName });
     if (res.valid) {
-      alert(`✔ ${providerName.toUpperCase()} Verified: ${res.message}`);
+      alert(`✔ Connected successfully to ${providerName.toUpperCase()}: ${res.message}`);
     } else {
-      alert(`✖ Verification Failed for ${providerName.toUpperCase()}: ${res.error}`);
+      alert(`✖ Connection failed for ${providerName.toUpperCase()}: ${res.error}`);
     }
   } catch (err) {
-    alert(`Verification Error: ${err.message}`);
+    alert(`Connection Error: ${err.message}`);
   }
 }
 
@@ -238,15 +238,15 @@ async function loadMockInbox() {
 function renderMockInboxTable() {
   const tableBody = document.getElementById('mockInboxTableBody');
   const countBadge = document.getElementById('mockInboxCount');
-  if (countBadge) countBadge.textContent = `${state.mockMessages.length} captured`;
+  if (countBadge) countBadge.textContent = `${state.mockMessages.length} saved`;
 
   if (state.mockMessages.length === 0) {
     tableBody.innerHTML = `
       <tr>
         <td colspan="5" style="text-align: center; padding: 50px 20px;">
           <div style="font-size: 2.5rem; margin-bottom: 8px;">📬</div>
-          <div style="font-size: 1rem; font-weight: 600; color: #fff;">Virtual Inbox is Empty</div>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Emails sent while the Mock Provider is active will appear here.</p>
+          <div style="font-size: 1rem; font-weight: 600; color: #fff;">Test Inbox is Empty</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">When Test Mode is active, any emails you send will appear here.</p>
         </td>
       </tr>
     `;
@@ -289,10 +289,10 @@ function openMessageDetailModal(id) {
 }
 
 async function clearInbox() {
-  if (!confirm('Clear all captured mock emails?')) return;
+  if (!confirm('Delete all saved test emails?')) return;
   try {
     await API.clearMockInbox();
-    showToast('Virtual inbox cleared.');
+    showToast('Test inbox cleared.');
     await loadMockInbox();
   } catch (err) {
     alert('Failed to clear inbox: ' + err.message);
