@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script src="/js/theme.js"></script>
 </head>
 <body>
   <div class="app-container">
@@ -30,9 +31,6 @@
           <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
         </li>
         <li class="nav-item">
-          <a href="/contacts.html" onclick="setTimeout(() => openGroupManagerModal && openGroupManagerModal(), 300)"><span style="font-size: 1.1rem;">📁</span> Groups</a>
-        </li>
-        <li class="nav-item">
           <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
         </li>
         <li class="nav-item">
@@ -51,9 +49,14 @@
             <span class="user-role" id="userRole">Superuser</span>
           </div>
         </div>
-        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
-          🚪
-        </button>
+        <div style="display: flex; gap: 6px;">
+          <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light theme">
+            ☀️
+          </button>
+          <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+            🚪
+          </button>
+        </div>
       </div>
     </aside>
 
@@ -68,147 +71,189 @@
             <span id="healthText">Connecting...</span>
           </div>
           <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
-            <span>Adapter:</span>
-            <strong id="providerBadge">Mock / Local</strong>
+            <span>Active Provider:</span>
+            <strong id="providerBadge">MOCK</strong>
           </div>
+          <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; font-size: 0.82rem;">
+            + Launch Campaign
+          </a>
         </div>
       </header>
 
       <!-- Page Body -->
       <div class="page-body">
-        <!-- Notification Banner -->
-        <div id="phaseBanner" class="alert-box alert-success" style="display: none; margin-bottom: 24px;"></div>
-
-        <!-- Metrics Grid -->
+        <!-- 4 Enriched Deliverability & Queue Metrics Grid -->
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Total Contacts</span>
+              <span class="metric-label">Active Audience</span>
               <span class="metric-icon">👥</span>
             </div>
-            <div class="metric-value" id="metricContacts">-</div>
-            <div class="metric-meta">Verified active audience</div>
+            <div class="metric-value" id="metricContacts">0</div>
+            <div class="metric-meta" id="metricAudienceSub">Verified opt-in contacts</div>
           </div>
 
           <div class="metric-card">
             <div class="metric-header">
-              <span class="metric-label">Contact Groups</span>
-              <span class="metric-icon">📁</span>
-            </div>
-            <div class="metric-value" id="metricGroups">-</div>
-            <div class="metric-meta">Segmented distribution lists</div>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-header">
-              <span class="metric-label">Email Templates</span>
-              <span class="metric-icon">📝</span>
-            </div>
-            <div class="metric-value" id="metricTemplates">-</div>
-            <div class="metric-meta">Personalized layouts saved</div>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-header">
-              <span class="metric-label">Campaigns Created</span>
+              <span class="metric-label">Queue Dispatched</span>
               <span class="metric-icon">🚀</span>
             </div>
-            <div class="metric-value" id="metricCampaigns">-</div>
-            <div class="metric-meta">Rate-controlled runs</div>
+            <div class="metric-value" id="metricSent">0</div>
+            <div class="metric-meta" id="metricQueueSub">0 in-flight / pending</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Delivery Success</span>
+              <span class="metric-icon">📈</span>
+            </div>
+            <div class="metric-value" id="metricDeliveryRate">100%</div>
+            <div class="metric-meta" id="metricDeliverySub">0 confirmed deliveries</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">Suppression Guard</span>
+              <span class="metric-icon">🛡️</span>
+            </div>
+            <div class="metric-value" id="metricSuppressed">0</div>
+            <div class="metric-meta" id="metricSuppressedSub">0 bounces & unsubs blocked</div>
           </div>
         </div>
 
-        <!-- Section-Wise Execution Progress -->
+        <!-- Split Section: Active Campaigns Telemetry & Quick Action Hub -->
+        <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; margin-bottom: 24px;">
+          <!-- Recent Campaigns with Live Telemetry Quick Access -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-header" style="margin-bottom: 16px;">
+              <div>
+                <h2 class="card-title">Active Campaign Queues & Telemetry</h2>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+                  Real-time status of current and recent message queues.
+                </p>
+              </div>
+              <a href="/campaigns.html" class="btn btn-secondary" style="font-size: 0.78rem; text-decoration: none;">
+                View All →
+              </a>
+            </div>
+
+            <div id="dashboardCampaignsList">
+              <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+                Loading campaign queues...
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions & Diagnostics -->
+          <div class="card" style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="card-header" style="margin-bottom: 16px;">
+                <h2 class="card-title">Dispatch Quick Actions</h2>
+              </div>
+              
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; justify-content: center;">
+                  🚀 New Campaign Wizard
+                </a>
+                <a href="/contacts.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
+                  📥 Import Contacts CSV
+                </a>
+                <a href="/templates.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
+                  📝 Edit Email Templates
+                </a>
+                <a href="/settings.html" class="btn btn-secondary" style="text-decoration: none; justify-content: center;">
+                  ⚙️ Switch Provider (SES / Resend / SMTP)
+                </a>
+              </div>
+            </div>
+
+            <!-- Health Snapshot Widget -->
+            <div style="margin-top: 24px; padding: 14px; background: rgba(0,0,0,0.15); border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="color: var(--text-muted);">Runtime Memory:</span>
+                <strong id="diagMemory" style="color: #fff;">—</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span style="color: var(--text-muted);">System Uptime:</span>
+                <strong id="diagUptime" style="color: #fff;">—</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Rate Limiter Guard:</span>
+                <strong style="color: var(--success);">ACTIVE (Sliding Window)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section-Wise Execution Progress (Completed Architecture) -->
         <div class="card">
           <div class="card-header">
             <div>
-              <h2 class="card-title">Section-Wise Implementation Roadmap</h2>
+              <h2 class="card-title">System Architecture Milestones</h2>
               <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-                Following the methodical plan step-by-step to guarantee reliable architecture and zero regressions.
+                Complete production architecture verified end-to-end.
               </p>
             </div>
-            <span class="badge-active phase-badge">Phase 1 Complete</span>
+            <span class="badge-active phase-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
+              All 7 Phases Complete
+            </span>
           </div>
 
           <div class="phase-list">
             <div class="phase-item completed">
-              <span class="phase-badge badge-completed">Done</span>
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 1: Project Skeleton, Environment & Database Core</div>
                 <div class="phase-desc">Node.js + Express setup, native SQLite (WAL mode, foreign keys), schema initialization, JWT auth, and seed engine.</div>
               </div>
             </div>
 
-            <div class="phase-item active">
-              <span class="phase-badge badge-active">Next Up</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 2: Contact Management, Groups & Smart CSV Importer</div>
-                <div class="phase-desc">Full CRUD for contacts, group segmentation, auto-detect column mapping CSV import, deduplication, and syntax validation.</div>
+                <div class="phase-desc">Full CRUD for contacts, group segmentation, auto-detect column mapping CSV streaming parser, deduplication, and syntax validation.</div>
               </div>
             </div>
 
-            <div class="phase-item">
-              <span class="phase-badge badge-pending">Upcoming</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 3: Template Studio & Live Dynamic Personalization Preview</div>
-                <div class="phase-desc">Rich template editor, dynamic token interpolation (<code>{{first_name | 'there'}}</code>), and side-by-side recipient previewer.</div>
+                <div class="phase-desc">Rich template editor, dynamic token fallback parser (<code>{{name | 'Friend'}}</code>), and side-by-side live preview.</div>
               </div>
             </div>
 
-            <div class="phase-item">
-              <span class="phase-badge badge-pending">Upcoming</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 4: Multi-Provider Email Dispatcher & Test Sending</div>
-                <div class="phase-desc">Modular adapter layer: Mock Provider (offline zero-cost), Resend, Amazon SES, SendGrid, and standard SMTP.</div>
+                <div class="phase-desc">Pluggable adapter layer: Mock Virtual Inbox (offline zero-cost), Resend, Amazon SES, SendGrid, and standard SMTP.</div>
               </div>
             </div>
 
-            <div class="phase-item">
-              <span class="phase-badge badge-pending">Upcoming</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 5: Queue Engine, Rate Limiter & Campaign Orchestrator</div>
                 <div class="phase-desc">Token bucket rate regulation, atomic database state transitions, exponential backoff retries, and crash resumption.</div>
               </div>
             </div>
 
-            <div class="phase-item">
-              <span class="phase-badge badge-pending">Upcoming</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 6: Compliance, Webhooks & Delivery Analytics</div>
-                <div class="phase-desc">RFC 8058 one-click unsubscribe, bounce/complaint webhook processing, suppression list filtering, and live SSE event streams.</div>
+                <div class="phase-desc">RFC 8058 one-click unsubscribe, global suppression manager, provider webhook ingestion, and real-time SSE telemetry tracker.</div>
               </div>
             </div>
 
-            <div class="phase-item">
-              <span class="phase-badge badge-pending">Upcoming</span>
+            <div class="phase-item completed">
+              <span class="phase-badge badge-completed">✓ Complete</span>
               <div class="phase-details">
                 <div class="phase-name">Phase 7: Frontend Polish, Live Telemetry & Production Hardening</div>
-                <div class="phase-desc">Full telemetry dashboard, real-time charts, error inspector, and production deployment configuration.</div>
+                <div class="phase-desc">Enriched KPI telemetry, persistent Dark/Light theme mode, public API rate limiting, and system health diagnostics.</div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick System Status Details -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Database & Core Diagnostics</h2>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Database Storage</div>
-              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">SQLite 3 (WAL Mode)</div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;"><code>./storage/sendqueue.db</code></div>
-            </div>
-            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Queue Concurrency Model</div>
-              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">Atomic State Machine</div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Crash-resilient, 0 duplicate sends</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Provider Test Mode</div>
-              <div style="font-size: 1rem; font-weight: 600; margin-top: 4px; color: #fff;">Mock Local Adapter Active</div>
-              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Zero external cost during development</div>
             </div>
           </div>
         </div>
@@ -219,16 +264,6 @@
 
   <script src="/js/api.js"></script>
   <script>
-    function showPhaseNotice(feature) {
-      const banner = document.getElementById('phaseBanner');
-      banner.style.display = 'block';
-      banner.className = 'alert-box alert-success';
-      banner.innerHTML = `<strong>Section-Wise Flow:</strong> <code>${feature}</code> is scheduled for implementation in the next phase. Phase 1 foundation is currently running!`;
-      setTimeout(() => {
-        banner.style.display = 'none';
-      }, 5000);
-    }
-
     async function initDashboard() {
       // 1. Check Auth
       try {
@@ -239,7 +274,6 @@
           document.getElementById('avatarLetter').textContent = (userRes.user.name || 'A')[0].toUpperCase();
         }
       } catch (e) {
-        // If not logged in, redirect to login
         window.location.href = '/login.html';
         return;
       }
@@ -249,27 +283,105 @@
         const health = await API.getHealth();
         if (health.status === 'healthy') {
           document.getElementById('healthText').textContent = `Live: SQLite (${health.database})`;
+          if (health.system) {
+            document.getElementById('diagMemory').textContent = `${health.system.memory.heapUsedMb} MB Heap`;
+            const mins = Math.floor(health.system.uptimeSec / 60);
+            const hrs = Math.floor(mins / 60);
+            document.getElementById('diagUptime').textContent = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m ${health.system.uptimeSec % 60}s`;
+          }
         }
       } catch (err) {
-        document.getElementById('healthPill').style.background = 'rgba(239, 68, 68, 0.1)';
-        document.getElementById('healthPill').style.color = '#f87171';
+        const pill = document.getElementById('healthPill');
+        if (pill) {
+          pill.style.background = 'rgba(239, 68, 68, 0.1)';
+          pill.style.color = '#f87171';
+        }
         document.getElementById('healthText').textContent = 'Server Offline';
       }
 
-      // 3. Fetch Stats
+      // 3. Fetch Enriched Stats
       try {
         const statsRes = await API.getStats();
         if (statsRes && statsRes.stats) {
           const s = statsRes.stats;
+          const q = s.queue || {};
+
           document.getElementById('metricContacts').textContent = s.contacts ?? 0;
-          document.getElementById('metricGroups').textContent = s.groups ?? 0;
-          document.getElementById('metricTemplates').textContent = s.templates ?? 0;
-          document.getElementById('metricCampaigns').textContent = s.campaigns ?? 0;
+          document.getElementById('metricAudienceSub').textContent = `${s.groups ?? 0} contact groups assigned`;
+
+          document.getElementById('metricSent').textContent = q.sent ?? 0;
+          document.getElementById('metricQueueSub').textContent = `${q.pending ?? 0} in-flight / queued`;
+
+          document.getElementById('metricDeliveryRate').textContent = `${q.deliveryRate ?? 100}%`;
+          document.getElementById('metricDeliverySub').textContent = `${q.delivered ?? 0} confirmed delivered`;
+
+          document.getElementById('metricSuppressed').textContent = s.suppressed ?? 0;
+          document.getElementById('metricSuppressedSub').textContent = `${q.bounced ?? 0} bounced & unsubs`;
+
           document.getElementById('providerBadge').textContent = (s.activeProvider || 'Mock').toUpperCase();
+
+          renderRecentCampaigns(s.recentCampaigns || []);
         }
       } catch (err) {
         console.error('Stats loading failed:', err);
       }
+    }
+
+    function renderRecentCampaigns(campaigns) {
+      const container = document.getElementById('dashboardCampaignsList');
+      if (!container) return;
+
+      if (campaigns.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+            No campaigns created yet. Click <strong>+ Launch Campaign</strong> above to dispatch your first queue!
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = campaigns.map(c => {
+        let statusColor = '#9ca3af';
+        if (c.status === 'SENDING') statusColor = '#38bdf8';
+        if (c.status === 'COMPLETED') statusColor = '#34d399';
+        if (c.status === 'PAUSED') statusColor = '#f59e0b';
+        if (c.status === 'FAILED') statusColor = '#f87171';
+
+        const percent = c.progressPercent || 0;
+
+        return `
+          <div style="padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div>
+                <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(c.name)}</strong>
+                <span class="status-pill" style="font-size: 0.68rem; padding: 2px 8px; margin-left: 8px; color: ${statusColor}; border-color: ${statusColor};">${c.status}</span>
+              </div>
+              <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 3px 8px; font-size: 0.72rem; text-decoration: none;">
+                📡 View Telemetry
+              </a>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+              <span>Dispatched: <strong style="color: #fff;">${c.sent_count || 0} / ${c.total_recipients || 0}</strong></span>
+              <span>Delivered: <strong style="color: #34d399;">${c.delivered_count || 0}</strong></span>
+              <span>${percent}%</span>
+            </div>
+
+            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: var(--radius-full); overflow: hidden;">
+              <div style="width: ${percent}%; height: 100%; background: ${percent === 100 ? 'var(--success)' : 'linear-gradient(90deg, var(--primary), #a855f7)'}; border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
     document.addEventListener('DOMContentLoaded', initDashboard);

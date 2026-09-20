@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <script src="/js/theme.js"></script>
   <style>
     .telemetry-grid {
       display: grid;
@@ -143,9 +144,14 @@
             <span class="user-role" id="userRole">Superuser</span>
           </div>
         </div>
-        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
-          🚪
-        </button>
+        <div style="display: flex; gap: 6px;">
+          <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light theme">
+            ☀️
+          </button>
+          <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+            🚪
+          </button>
+        </div>
       </div>
     </aside>
 

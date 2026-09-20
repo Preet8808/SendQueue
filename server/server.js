@@ -39,16 +39,18 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+const { authRateLimiter, complianceRateLimiter, webhookRateLimiter } = require('./middleware/rate-limiter.middleware');
+
 // API Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRateLimiter, authRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/campaigns', campaignRoutes);
-app.use('/api/compliance', complianceRoutes);
+app.use('/api/compliance', complianceRateLimiter, complianceRoutes);
 app.use('/api/suppression', suppressionRoutes);
-app.use('/api/webhooks', webhookRoutes);
+app.use('/api/webhooks', webhookRateLimiter, webhookRoutes);
 app.use('/api', systemRoutes);
 
 // Fallback for Single Page Views or Static HTML
