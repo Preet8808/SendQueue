@@ -1,10 +1,17 @@
 const { DatabaseSync } = require('node:sqlite');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+const envPath = path.resolve(__dirname, '../../.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+} else {
+  require('dotenv').config();
+}
 
-const dbPath = process.env.DATABASE_PATH || './storage/sendqueue.db';
-const resolvedDbPath = path.resolve(process.cwd(), dbPath);
+const defaultStorageDir = path.resolve(__dirname, '../../storage');
+const resolvedDbPath = process.env.DATABASE_PATH
+  ? path.resolve(process.cwd(), process.env.DATABASE_PATH)
+  : path.join(defaultStorageDir, 'sendqueue.db');
 const storageDir = path.dirname(resolvedDbPath);
 
 if (!fs.existsSync(storageDir)) {

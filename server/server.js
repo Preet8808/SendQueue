@@ -2,7 +2,13 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
+const fs = require('fs');
+const envPath = path.resolve(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+} else {
+  require('dotenv').config();
+}
 
 const { db } = require('./database/db');
 const authRoutes = require('./routes/auth.routes');

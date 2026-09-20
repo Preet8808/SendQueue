@@ -10,7 +10,7 @@ const CsvService = require('../services/csv.service');
 const { authenticateToken } = require('../middleware/auth.middleware');
 
 // Multer storage for CSV uploads
-const uploadDir = path.resolve(process.cwd(), './storage/uploads');
+const uploadDir = path.resolve(__dirname, '../../storage/uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
