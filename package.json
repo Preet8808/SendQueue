@@ -8,10 +8,13 @@
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
     "db:seed": "node server/database/seed.js",
+    "db:clean": "node server/database/clean.js",
     "test:phase2": "node server/test-phase2.js",
     "test:phase3": "node server/test-phase3.js",
     "test:phase4": "node server/test-phase4.js",
-    "test:phase5": "node server/test-phase5.js"
+    "test:phase5": "node server/test-phase5.js",
+    "test:phase6": "node server/test-phase6.js",
+    "test:phase7": "node server/test-phase7.js"
   },
   "keywords": [
     "email",
