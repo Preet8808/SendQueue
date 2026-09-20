@@ -168,9 +168,13 @@ const CampaignService = {
       SELECT 
         c.*,
         t.name as template_name,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'SENT') as calculated_sent,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('FAILED', 'BOUNCED')) as calculated_failed,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('PENDING', 'QUEUED', 'SENDING')) as calculated_pending
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('SENT', 'DELIVERED')) as calculated_sent,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'DELIVERED') as calculated_delivered,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'BOUNCED') as calculated_bounced,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'COMPLAINED') as calculated_complained,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'UNSUBSCRIBED') as calculated_unsubscribed,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'FAILED') as calculated_failed,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('PENDING', 'QUEUED', 'SENDING', 'RETRY')) as calculated_pending
       FROM campaigns c
       LEFT JOIN templates t ON c.template_id = t.id
       ${whereClause}
@@ -182,18 +186,30 @@ const CampaignService = {
 
     const formatted = rows.map(c => {
       const sent = c.calculated_sent || 0;
+      const delivered = c.calculated_delivered || 0;
+      const bounced = c.calculated_bounced || 0;
+      const complained = c.calculated_complained || 0;
+      const unsubscribed = c.calculated_unsubscribed || 0;
       const failed = c.calculated_failed || 0;
       const pending = c.calculated_pending || 0;
       const totalRec = c.total_recipients || 0;
-      const processed = sent + failed;
+      const processed = sent + failed + bounced;
       const progressPercent = totalRec > 0 ? Math.min(100, Math.round((processed / totalRec) * 100)) : 0;
+      const deliveryRate = sent > 0 ? Math.min(100, Math.round((delivered / sent) * 100)) : 0;
+      const bounceRate = sent > 0 ? (Math.round((bounced / sent) * 1000) / 10) : 0;
 
       return {
         ...c,
         sent_count: sent,
+        delivered_count: delivered,
+        bounced_count: bounced,
+        complained_count: complained,
+        unsubscribed_count: unsubscribed,
         failed_count: failed,
         pending_count: pending,
-        progressPercent
+        progressPercent,
+        deliveryRate,
+        bounceRate
       };
     });
 
@@ -213,9 +229,13 @@ const CampaignService = {
       SELECT 
         c.*,
         t.name as template_name,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'SENT') as calculated_sent,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('FAILED', 'BOUNCED')) as calculated_failed,
-        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('PENDING', 'QUEUED', 'SENDING')) as calculated_pending
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('SENT', 'DELIVERED')) as calculated_sent,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'DELIVERED') as calculated_delivered,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'BOUNCED') as calculated_bounced,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'COMPLAINED') as calculated_complained,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'UNSUBSCRIBED') as calculated_unsubscribed,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status = 'FAILED') as calculated_failed,
+        (SELECT COUNT(*) FROM campaign_recipients cr WHERE cr.campaign_id = c.id AND cr.status IN ('PENDING', 'QUEUED', 'SENDING', 'RETRY')) as calculated_pending
       FROM campaigns c
       LEFT JOIN templates t ON c.template_id = t.id
       WHERE c.id = ?
@@ -224,18 +244,30 @@ const CampaignService = {
     if (!campaign) return null;
 
     const sent = campaign.calculated_sent || 0;
+    const delivered = campaign.calculated_delivered || 0;
+    const bounced = campaign.calculated_bounced || 0;
+    const complained = campaign.calculated_complained || 0;
+    const unsubscribed = campaign.calculated_unsubscribed || 0;
     const failed = campaign.calculated_failed || 0;
     const pending = campaign.calculated_pending || 0;
     const totalRec = campaign.total_recipients || 0;
-    const processed = sent + failed;
+    const processed = sent + failed + bounced;
     const progressPercent = totalRec > 0 ? Math.min(100, Math.round((processed / totalRec) * 100)) : 0;
+    const deliveryRate = sent > 0 ? Math.min(100, Math.round((delivered / sent) * 100)) : 0;
+    const bounceRate = sent > 0 ? (Math.round((bounced / sent) * 1000) / 10) : 0;
 
     return {
       ...campaign,
       sent_count: sent,
+      delivered_count: delivered,
+      bounced_count: bounced,
+      complained_count: complained,
+      unsubscribed_count: unsubscribed,
       failed_count: failed,
       pending_count: pending,
-      progressPercent
+      progressPercent,
+      deliveryRate,
+      bounceRate
     };
   },
 

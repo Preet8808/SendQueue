@@ -141,6 +141,9 @@ function renderCampaignCards() {
             </div>
           </div>
           <div style="display: flex; gap: 8px;">
+            <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 5px 12px; font-size: 0.78rem; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+              📡 Live Telemetry
+            </a>
             ${actionButtons}
             <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="openQueueInspector('${c.id}')">
               🔍 Inspect Queue
@@ -160,12 +163,13 @@ function renderCampaignCards() {
         </div>
 
         <!-- Metrics Strip -->
-        <div style="display: flex; gap: 24px; font-size: 0.8rem; border-top: 1px solid var(--border-color); padding-top: 12px; flex-wrap: wrap;">
-          <div><span style="color: var(--text-muted);">Total Recipients:</span> <strong style="color: #fff;">${c.total_recipients}</strong></div>
-          <div><span style="color: var(--text-muted);">Sent:</span> <strong style="color: #34d399;">${c.sent_count}</strong></div>
-          <div><span style="color: var(--text-muted);">Failed:</span> <strong style="color: #f87171;">${c.failed_count}</strong></div>
+        <div style="display: flex; gap: 20px; font-size: 0.8rem; border-top: 1px solid var(--border-color); padding-top: 12px; flex-wrap: wrap;">
+          <div><span style="color: var(--text-muted);">Recipients:</span> <strong style="color: #fff;">${c.total_recipients}</strong></div>
+          <div><span style="color: var(--text-muted);">Sent:</span> <strong style="color: #38bdf8;">${c.sent_count}</strong></div>
+          <div><span style="color: var(--text-muted);">Delivered:</span> <strong style="color: #34d399;">${c.delivered_count || 0}</strong></div>
+          <div><span style="color: var(--text-muted);">Bounced:</span> <strong style="color: #f87171;">${c.bounced_count || 0}</strong></div>
           <div><span style="color: var(--text-muted);">Pending:</span> <strong style="color: #a5b4fc;">${c.pending_count}</strong></div>
-          <div><span style="color: var(--text-muted);">Rate Limit:</span> <strong style="color: #fff;">${c.rate_limit_per_sec} msg/sec</strong></div>
+          <div><span style="color: var(--text-muted);">Rate:</span> <strong style="color: #fff;">${c.rate_limit_per_sec} msg/sec</strong></div>
           <div style="margin-left: auto; color: var(--text-muted); font-size: 0.75rem;">Created: ${new Date(c.created_at).toLocaleString()}</div>
         </div>
       </div>

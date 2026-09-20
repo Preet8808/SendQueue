@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaign Telemetry & Tracker — SendQueue</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .metric-card.sent::after { background: #38bdf8; }
+    .metric-card.delivered::after { background: var(--success); }
+    .metric-card.bounced::after { background: var(--danger); }
+    .metric-card.pending::after { background: #a855f7; }
+    .metric-card.unsub::after { background: var(--warning); }
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+    .metric-value {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .metric-sub {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .metric-sub.good { color: var(--success); }
+    .metric-sub.bad { color: var(--danger); }
+
+    .live-stream-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+    }
+    .stream-feed {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 6px;
+      margin-top: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+    }
+    .stream-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge-event {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .badge-SENT { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-DELIVERED { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-BOUNCE { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-COMPLAINT { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-UNSUBSCRIBE { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">SendQueue</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Email Dispatcher</div>
+        </div>
+        <span class="brand-badge">v1.0</span>
+      </div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+        </li>
+        <li class="nav-item active">
+          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+        </li>
+        <li class="nav-item">
+          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="avatarLetter">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">Admin</span>
+            <span class="user-role" id="userRole">Superuser</span>
+          </div>
+        </div>
+        <button onclick="API.logout()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.75rem;" title="Sign out">
+          🚪
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <a href="/campaigns.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+            ← Back to Campaigns
+          </a>
+          <div class="page-title" id="pageCampaignName">Campaign Telemetry</div>
+        </div>
+
+        <div class="top-actions">
+          <div class="status-pill" id="liveConnectionPill">
+            <span class="pulse-dot"></span>
+            <span id="liveStatusText">Live SSE Stream</span>
+          </div>
+
+          <button class="btn btn-secondary" onclick="openSimulateModal()" style="font-size: 0.82rem;">
+            🧪 Test Webhook Event
+          </button>
+          
+          <div id="campaignControls" style="display: flex; gap: 8px;">
+            <!-- Rendered dynamically (Pause/Resume/Cancel) -->
+          </div>
+        </div>
+      </header>
+
+      <div class="content-body">
+        <!-- Campaign Summary Banner -->
+        <div class="card" style="margin-bottom: 24px; padding: 18px 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                <h2 id="campaignSubject" style="font-size: 1.25rem; font-weight: 700; color: #fff;">Loading Subject...</h2>
+                <span id="campaignStatusPill" class="status-pill" style="font-size: 0.72rem; padding: 2px 10px;">QUEUED</span>
+              </div>
+              <div style="display: flex; gap: 20px; font-size: 0.82rem; color: var(--text-muted); flex-wrap: wrap;">
+                <div>From: <strong id="campaignSender" style="color: #cbd5e1;">—</strong></div>
+                <div>Template: <strong id="campaignTemplate" style="color: #cbd5e1;">—</strong></div>
+                <div>Speed: <strong id="campaignRate" style="color: #cbd5e1;">5/sec</strong></div>
+                <div>Created: <span id="campaignCreated">—</span></div>
+              </div>
+            </div>
+
+            <!-- Overall Dispatch Progress Bar -->
+            <div style="min-width: 260px; max-width: 340px; width: 100%;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
+                <span style="color: var(--text-muted);">Queue Completion</span>
+                <span id="progressPercentText" style="color: #fff; font-weight: 700;">0%</span>
+              </div>
+              <div style="height: 10px; background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-full); overflow: hidden;">
+                <div id="progressBarFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), #a855f7); border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 Telemetry Metrics Cards -->
+        <div class="telemetry-grid">
+          <div class="metric-card">
+            <div class="metric-label">Audience Target</div>
+            <div class="metric-value" id="metricTotal">0</div>
+          </div>
+          <div class="metric-card sent">
+            <div class="metric-label">Dispatched (Sent)</div>
+            <div class="metric-value">
+              <span id="metricSent">0</span>
+            </div>
+          </div>
+          <div class="metric-card delivered">
+            <div class="metric-label">Delivered</div>
+            <div class="metric-value">
+              <span id="metricDelivered">0</span>
+              <span class="metric-sub good" id="metricDeliveryRate">0%</span>
+            </div>
+          </div>
+          <div class="metric-card bounced">
+            <div class="metric-label">Bounced</div>
+            <div class="metric-value">
+              <span id="metricBounced">0</span>
+              <span class="metric-sub bad" id="metricBounceRate">0%</span>
+            </div>
+          </div>
+          <div class="metric-card unsub">
+            <div class="metric-label">Unsubs / Complaints</div>
+            <div class="metric-value">
+              <span id="metricUnsub">0</span>
+              <span class="metric-sub" style="color: var(--warning);" id="metricComplaints">0 comp</span>
+            </div>
+          </div>
+          <div class="metric-card pending">
+            <div class="metric-label">Pending / In Queue</div>
+            <div class="metric-value" id="metricPending">0</div>
+          </div>
+        </div>
+
+        <!-- Split View: Live Event Ticker & Recipient Queue Explorer -->
+        <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; margin-bottom: 30px;">
+          <!-- Left: Real-Time Event Ticker (SSE) -->
+          <div class="live-stream-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="pulse-dot"></span>
+                <strong style="color: #fff; font-size: 0.92rem;">Real-Time Activity Feed</strong>
+              </div>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Auto-updating via SSE</span>
+            </div>
+
+            <div class="stream-feed" id="liveStreamFeed">
+              <div style="color: var(--text-muted); text-align: center; margin: auto;">
+                Waiting for delivery telemetry events...
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Recipient Status Explorer -->
+          <div class="card" style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+              <strong style="color: #fff; font-size: 0.95rem;">Queue Recipients Breakdown</strong>
+              
+              <div style="display: flex; gap: 8px;">
+                <select id="recipientStatusFilter" onchange="loadRecipients()" style="padding: 4px 10px; font-size: 0.78rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: #fff;">
+                  <option value="">All Statuses</option>
+                  <option value="DELIVERED">Delivered</option>
+                  <option value="SENT">Sent (Awaiting confirmation)</option>
+                  <option value="BOUNCED">Bounced</option>
+                  <option value="UNSUBSCRIBED">Unsubscribed</option>
+                  <option value="COMPLAINED">Complained</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="FAILED">Failed</option>
+                </select>
+                <button class="btn btn-secondary" onclick="loadRecipients()" style="padding: 4px 10px; font-size: 0.78rem;">
+                  ↻ Refresh
+                </button>
+              </div>
+            </div>
+
+            <div class="table-container" style="max-height: 320px; overflow-y: auto;">
+              <table class="table" style="font-size: 0.8rem;">
+                <thead>
+                  <tr>
+                    <th>Recipient</th>
+                    <th>Status</th>
+                    <th>Attempts</th>
+                    <th>Activity / Diagnostics</th>
+                  </tr>
+                </thead>
+                <tbody id="recipientsTableBody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; padding: 24px; color: var(--text-muted);">Loading recipient queue...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Test Webhook Simulation -->
+  <div class="modal" id="simulateModal">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Simulate Provider Webhook</h3>
+        <button class="modal-close" onclick="closeModal('simulateModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+          Inject a synthetic webhook event into SendQueue to test delivery, bounce suppression, or spam complaint handlers instantly.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">Select Event Type</label>
+          <select id="simEventType" class="form-control">
+            <option value="DELIVERED">DELIVERED (Provider confirmed delivery)</option>
+            <option value="BOUNCE">BOUNCE (Hard bounce - triggers suppression)</option>
+            <option value="COMPLAINT">COMPLAINT (Spam complaint - triggers suppression)</option>
+            <option value="UNSUBSCRIBE">UNSUBSCRIBE (User opted out)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Recipient Email</label>
+          <input type="email" id="simEmail" class="form-control" placeholder="recipient@example.com (or select from list)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Diagnostics / Reason (Optional)</label>
+          <input type="text" id="simReason" class="form-control" placeholder="e.g., 550 Mailbox does not exist">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('simulateModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitSimulation()">Emit Webhook Event</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/tracker.js"></script>
+</body>
+</html>

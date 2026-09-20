@@ -509,6 +509,223 @@ function setupEventListeners() {
   }
 }
 
+// --- View Switcher (Contacts vs Suppression) ---
+let currentView = 'contacts';
+let suppressionState = {
+  items: [],
+  pagination: { page: 1, limit: 15, total: 0, totalPages: 1 },
+  search: '',
+  reason: ''
+};
+
+function switchView(viewName) {
+  currentView = viewName;
+  const contactsView = document.getElementById('contactsView');
+  const suppressionView = document.getElementById('suppressionView');
+  const tabContactsBtn = document.getElementById('tabContactsBtn');
+  const tabSuppressionBtn = document.getElementById('tabSuppressionBtn');
+
+  if (viewName === 'contacts') {
+    if (contactsView) contactsView.style.display = 'block';
+    if (suppressionView) suppressionView.style.display = 'none';
+    if (tabContactsBtn) { tabContactsBtn.className = 'btn btn-primary'; }
+    if (tabSuppressionBtn) { tabSuppressionBtn.className = 'btn btn-secondary'; }
+    loadContacts();
+  } else {
+    if (contactsView) contactsView.style.display = 'none';
+    if (suppressionView) suppressionView.style.display = 'block';
+    if (tabContactsBtn) { tabContactsBtn.className = 'btn btn-secondary'; }
+    if (tabSuppressionBtn) { tabSuppressionBtn.className = 'btn btn-primary'; }
+    loadSuppressionStats();
+    loadSuppressionList();
+  }
+}
+
+// --- Suppression List Handling ---
+async function loadSuppressionStats() {
+  try {
+    const res = await API.getSuppressionStats();
+    const stats = res.stats || {};
+    document.getElementById('suppStatTotal').textContent = stats.total || 0;
+    document.getElementById('suppStatUnsub').textContent = stats.unsubscribe || 0;
+    document.getElementById('suppStatBounce').textContent = stats.hard_bounce || 0;
+    document.getElementById('suppStatComplaint').textContent = stats.complaint || 0;
+    document.getElementById('suppStatManual').textContent = stats.manual || 0;
+  } catch (err) {
+    console.error('Error loading suppression stats:', err);
+  }
+}
+
+async function loadSuppressionList() {
+  const tableBody = document.getElementById('suppressionTableBody');
+  const searchInput = document.getElementById('suppressionSearchInput');
+  const reasonFilter = document.getElementById('suppressionReasonFilter');
+
+  suppressionState.search = searchInput ? searchInput.value.trim() : '';
+  suppressionState.reason = reasonFilter ? reasonFilter.value : '';
+
+  try {
+    const res = await API.getSuppressionList({
+      page: suppressionState.pagination.page,
+      limit: suppressionState.pagination.limit,
+      search: suppressionState.search,
+      reason: suppressionState.reason
+    });
+
+    suppressionState.items = res.items || [];
+    suppressionState.pagination = res.pagination || suppressionState.pagination;
+    renderSuppressionTable();
+  } catch (err) {
+    tableBody.innerHTML = `<tr><td colspan="5" style="color: #f87171; padding: 20px;">Failed to load suppression list: ${err.message}</td></tr>`;
+  }
+}
+
+function renderSuppressionTable() {
+  const tableBody = document.getElementById('suppressionTableBody');
+  const items = suppressionState.items;
+
+  if (items.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
+          No suppressed emails found.
+        </td>
+      </tr>
+    `;
+    updateSuppressionPagination();
+    return;
+  }
+
+  tableBody.innerHTML = items.map(item => {
+    let reasonBadgeClass = 'badge-active';
+    let reasonLabel = item.reason;
+    if (item.reason === 'unsubscribe') {
+      reasonBadgeClass = 'badge-unsub';
+      reasonLabel = 'Unsubscribed';
+    } else if (item.reason === 'hard_bounce') {
+      reasonBadgeClass = 'badge-bounced';
+      reasonLabel = 'Hard Bounce';
+    } else if (item.reason === 'complaint') {
+      reasonBadgeClass = 'badge-bounced';
+      reasonLabel = 'Complaint';
+    } else if (item.reason === 'manual') {
+      reasonBadgeClass = 'badge-group';
+      reasonLabel = 'Manual';
+    }
+
+    return `
+      <tr>
+        <td>
+          <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(item.email)}</strong>
+        </td>
+        <td>
+          <span class="${reasonBadgeClass}">${escapeHtml(reasonLabel)}</span>
+        </td>
+        <td>
+          <span style="font-size: 0.82rem; color: var(--text-secondary);">
+            ${item.source_campaign_name ? escapeHtml(item.source_campaign_name) : '—'}
+          </span>
+        </td>
+        <td>
+          <span style="font-size: 0.78rem; color: var(--text-muted);">
+            ${new Date(item.created_at).toLocaleDateString()}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="removeSuppression('${item.id}')" title="Remove from blacklist (allow sending)">
+            🔓 Unblock
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  updateSuppressionPagination();
+}
+
+function updateSuppressionPagination() {
+  const p = suppressionState.pagination;
+  const start = p.total === 0 ? 0 : (p.page - 1) * p.limit + 1;
+  const end = Math.min(p.total, p.page * p.limit);
+  const info = document.getElementById('suppPaginationInfo');
+  if (info) info.textContent = `Showing ${start} to ${end} of ${p.total} suppressed emails`;
+
+  const prevBtn = document.getElementById('suppPrevPageBtn');
+  const nextBtn = document.getElementById('suppNextPageBtn');
+  if (prevBtn) prevBtn.disabled = p.page <= 1;
+  if (nextBtn) nextBtn.disabled = p.page >= p.totalPages;
+}
+
+function openAddSuppressionModal() {
+  document.getElementById('suppressEmail').value = '';
+  document.getElementById('suppressReason').value = 'manual';
+  openModal('addSuppressionModal');
+}
+
+async function removeSuppression(id) {
+  if (!confirm('Are you sure you want to remove this email from the suppression list? It will be eligible for future campaigns.')) return;
+  try {
+    await API.removeSuppressed(id);
+    showToast('Email removed from suppression list.');
+    loadSuppressionStats();
+    loadSuppressionList();
+  } catch (err) {
+    alert('Failed to remove: ' + err.message);
+  }
+}
+
+function setupSuppressionEventListeners() {
+  const searchInput = document.getElementById('suppressionSearchInput');
+  if (searchInput) {
+    let timer;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        suppressionState.pagination.page = 1;
+        loadSuppressionList();
+      }, 300);
+    });
+  }
+
+  const prevBtn = document.getElementById('suppPrevPageBtn');
+  const nextBtn = document.getElementById('suppNextPageBtn');
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (suppressionState.pagination.page > 1) {
+        suppressionState.pagination.page--;
+        loadSuppressionList();
+      }
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (suppressionState.pagination.page < suppressionState.pagination.totalPages) {
+        suppressionState.pagination.page++;
+        loadSuppressionList();
+      }
+    });
+  }
+
+  const addForm = document.getElementById('addSuppressionForm');
+  if (addForm) {
+    addForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('suppressEmail').value.trim();
+      const reason = document.getElementById('suppressReason').value;
+
+      try {
+        await API.addSuppressed({ email, reason });
+        closeModal('addSuppressionModal');
+        showToast('Email added to suppression list.');
+        loadSuppressionStats();
+        loadSuppressionList();
+      } catch (err) {
+        alert('Failed to add: ' + err.message);
+      }
+    });
+  }
+}
+
 function openModal(id) {
   const modal = document.getElementById(id);
   if (modal) modal.style.display = 'flex';
@@ -546,4 +763,7 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-document.addEventListener('DOMContentLoaded', initContactsPage);
+document.addEventListener('DOMContentLoaded', () => {
+  initContactsPage();
+  setupSuppressionEventListeners();
+});

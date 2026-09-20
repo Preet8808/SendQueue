@@ -82,4 +82,44 @@ router.get('/:id/recipients', (req, res) => {
   }
 });
 
+const WebhookService = require('../services/webhook.service');
+
+// GET /api/campaigns/:id/stream - Real-time SSE Telemetry Stream
+router.get('/:id/stream', (req, res) => {
+  const campaignId = req.params.id;
+  const initial = CampaignService.getCampaignById(campaignId);
+  if (!initial) {
+    return res.status(404).json({ error: 'Campaign not found.' });
+  }
+
+  // Set SSE headers
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  if (typeof res.flushHeaders === 'function') {
+    res.flushHeaders();
+  }
+
+  const sendUpdate = () => {
+    try {
+      const campaign = CampaignService.getCampaignById(campaignId);
+      if (!campaign) return;
+      const recentEvents = WebhookService.getAuditEvents({ campaign_id: campaignId, limit: 10 });
+      res.write(`data: ${JSON.stringify({ campaign, recentEvents, timestamp: Date.now() })}\n\n`);
+    } catch (err) {
+      // Ignore write errors if connection closed
+    }
+  };
+
+  // Send initial data immediately
+  sendUpdate();
+
+  // Stream updates every 1.5 seconds
+  const intervalId = setInterval(sendUpdate, 1500);
+
+  req.on('close', () => {
+    clearInterval(intervalId);
+  });
+});
+
 module.exports = router;

@@ -280,6 +280,47 @@ const API = {
   async getCampaignRecipients(id, params = {}) {
     const query = new URLSearchParams(params).toString();
     return this.request(`/api/campaigns/${id}/recipients${query ? '?' + query : ''}`);
+  },
+
+  getCampaignStreamUrl(id) {
+    const token = this.getToken();
+    return `/api/campaigns/${id}/stream?token=${encodeURIComponent(token || '')}`;
+  },
+
+  // Suppression endpoints
+  async getSuppressionList(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/api/suppression${query ? '?' + query : ''}`);
+  },
+
+  async getSuppressionStats() {
+    return this.request('/api/suppression/stats');
+  },
+
+  async addSuppressed(data) {
+    return this.request('/api/suppression', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async removeSuppressed(id) {
+    return this.request(`/api/suppression/${id}`, {
+      method: 'DELETE'
+    });
+  },
+
+  // Webhooks & Audit Events
+  async getAuditEvents(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/api/webhooks/audit-events${query ? '?' + query : ''}`);
+  },
+
+  async simulateWebhookEvent(data) {
+    return this.request('/api/webhooks/mock', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   }
 };
 

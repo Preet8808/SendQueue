@@ -12,6 +12,9 @@ const groupRoutes = require('./routes/group.routes');
 const templateRoutes = require('./routes/template.routes');
 const settingsRoutes = require('./routes/settings.routes');
 const campaignRoutes = require('./routes/campaign.routes');
+const complianceRoutes = require('./routes/compliance.routes');
+const suppressionRoutes = require('./routes/suppression.routes');
+const webhookRoutes = require('./routes/webhook.routes');
 const queueWorker = require('./queue/queue.worker');
 
 const app = express();
@@ -43,6 +46,9 @@ app.use('/api/groups', groupRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/campaigns', campaignRoutes);
+app.use('/api/compliance', complianceRoutes);
+app.use('/api/suppression', suppressionRoutes);
+app.use('/api/webhooks', webhookRoutes);
 app.use('/api', systemRoutes);
 
 // Fallback for Single Page Views or Static HTML

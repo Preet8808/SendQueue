@@ -60,17 +60,17 @@ Traditional bulk emailing tools either lock you into costly subscription tiers o
 
 We are executing this project section-wise to ensure solid testing, architecture validation, and quality at every milestone:
 
-- [ ] **Phase 1: Project Skeleton, Environment & Database Core**
+- [x] **Phase 1: Project Skeleton, Environment & Database Core**
   - Node.js structure, environment config, SQLite schema, migration/seed mechanism, authentication.
-- [ ] **Phase 2: Contact Management, Groups & Smart CSV Importer**
+- [x] **Phase 2: Contact Management, Groups & Smart CSV Importer**
   - Contact CRUD, auto-mapping CSV parser, deduplication, validation, contact segments.
-- [ ] **Phase 3: Template Studio & Live Dynamic Personalization Preview**
+- [x] **Phase 3: Template Studio & Live Dynamic Personalization Preview**
   - Template CRUD, token parser with fallbacks, side-by-side recipient preview, test email trigger.
-- [ ] **Phase 4: Multi-Provider Email Dispatcher & Test Sending**
+- [x] **Phase 4: Multi-Provider Email Dispatcher & Test Sending**
   - Provider adapter interface, Mock provider, Resend / SES / SMTP adapters, provider configuration UI.
-- [ ] **Phase 5: Queue Engine, Rate Limiter & Campaign Orchestrator**
+- [x] **Phase 5: Queue Engine, Rate Limiter & Campaign Orchestrator**
   - Campaign creation wizard, queue expansion, token bucket rate limiter, worker loop, resume on crash.
-- [ ] **Phase 6: Compliance, Webhooks & Delivery Analytics**
+- [x] **Phase 6: Compliance, Webhooks & Delivery Analytics**
   - RFC 8058 one-click unsubscribe, global suppression list, webhook event ingestion, real-time telemetry.
 - [ ] **Phase 7: Frontend Polish, Live Telemetry & Production Hardening**
   - Unified dashboard, visual metrics, performance optimization, deployment guide.

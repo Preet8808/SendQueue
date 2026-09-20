@@ -1,4 +1,5 @@
 const { db } = require('../database/db');
+const { v4: uuidv4 } = require('uuid');
 const TokenBucketRateLimiter = require('./rate.limiter');
 const ProviderManager = require('../providers/provider.manager');
 const TemplateService = require('../services/template.service');
@@ -158,7 +159,8 @@ class QueueWorker {
 
       // 3. Resolve personalization snapshot
       const contactData = recipient.personalization_data ? JSON.parse(recipient.personalization_data) : {};
-      const unsubscribeUrl = `https://sendqueue.local/unsubscribe?token=${recipient.id}&email=${encodeURIComponent(recipient.recipient_email)}`;
+      const baseUrl = process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`;
+      const unsubscribeUrl = `${baseUrl}/api/compliance/unsubscribe?token=${recipient.id}&email=${encodeURIComponent(recipient.recipient_email)}`;
 
       const rendered = TemplateService.renderTemplate(
         {
@@ -202,6 +204,12 @@ class QueueWorker {
           SET sent_count = sent_count + 1, updated_at = CURRENT_TIMESTAMP
           WHERE id = ?
         `).run(campaign.id);
+
+        // Record SENT event in audit_events
+        db.prepare(`
+          INSERT INTO audit_events (id, campaign_id, recipient_id, event_type, raw_payload, created_at)
+          VALUES (?, ?, ?, 'SENT', ?, CURRENT_TIMESTAMP)
+        `).run(uuidv4(), campaign.id, recipient.id, JSON.stringify({ messageId: dispatchResult.messageId || 'sent', provider: dispatchResult.provider || activeProvider.getName() }));
 
       } catch (sendErr) {
         console.error(`Dispatch failed for recipient ${recipient.recipient_email}:`, sendErr.message);

@@ -77,50 +77,143 @@
 
       <!-- Page Body -->
       <div class="page-body">
-        <!-- Filter & Search Toolbar -->
-        <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
-          <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 240px;">
-              <input type="text" id="contactSearchInput" class="form-control" placeholder="🔍 Search contacts by name, email, or company...">
+        <!-- View Switcher Tabs -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          <button id="tabContactsBtn" class="btn btn-primary" onclick="switchView('contacts')" style="display: flex; align-items: center; gap: 6px;">
+            <span>👥</span> Contacts & Audiences
+          </button>
+          <button id="tabSuppressionBtn" class="btn btn-secondary" onclick="switchView('suppression')" style="display: flex; align-items: center; gap: 6px;">
+            <span>🚫</span> Global Suppression List
+          </button>
+        </div>
+
+        <!-- VIEW 1: Contacts & Audiences -->
+        <div id="contactsView">
+          <!-- Filter & Search Toolbar -->
+          <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 240px;">
+                <input type="text" id="contactSearchInput" class="form-control" placeholder="🔍 Search contacts by name, email, or company...">
+              </div>
+              <div style="width: 200px;">
+                <select id="groupFilter" class="form-control">
+                  <option value="">All Groups</option>
+                </select>
+              </div>
+              <button class="btn btn-secondary" onclick="loadContacts()">
+                🔄 Refresh
+              </button>
             </div>
-            <div style="width: 200px;">
-              <select id="groupFilter" class="form-control">
-                <option value="">All Groups</option>
-              </select>
+          </div>
+
+          <!-- Contacts Table Card -->
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Company</th>
+                    <th>Groups</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="contactsTableBody">
+                  <!-- Injected via contacts.js -->
+                </tbody>
+              </table>
             </div>
-            <button class="btn btn-secondary" onclick="loadContacts()">
-              🔄 Refresh
-            </button>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar">
+              <span id="paginationInfo">Showing 0 to 0 of 0 contacts</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="prevPageBtn">Previous</button>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="nextPageBtn">Next</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Contacts Table Card -->
-        <div class="card" style="padding: 0; overflow: hidden;">
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Company</th>
-                  <th>Groups</th>
-                  <th>Status</th>
-                  <th style="text-align: right;">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="contactsTableBody">
-                <!-- Injected via contacts.js -->
-              </tbody>
-            </table>
+        <!-- VIEW 2: Global Suppression List -->
+        <div id="suppressionView" style="display: none;">
+          <!-- Suppression Stats Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;">
+            <div class="card" style="padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Suppressed</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #fff;" id="suppStatTotal">0</div>
+            </div>
+            <div class="card" style="padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: #a855f7; text-transform: uppercase;">Unsubscribed</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #c084fc;" id="suppStatUnsub">0</div>
+            </div>
+            <div class="card" style="padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: #ef4444; text-transform: uppercase;">Hard Bounces</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #f87171;" id="suppStatBounce">0</div>
+            </div>
+            <div class="card" style="padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: #f59e0b; text-transform: uppercase;">Complaints</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #fbbf24;" id="suppStatComplaint">0</div>
+            </div>
+            <div class="card" style="padding: 12px 16px;">
+              <div style="font-size: 0.72rem; color: #38bdf8; text-transform: uppercase;">Manual Blacklist</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #7dd3fc;" id="suppStatManual">0</div>
+            </div>
           </div>
 
-          <!-- Pagination Bar -->
-          <div class="pagination-bar">
-            <span id="paginationInfo">Showing 0 to 0 of 0 contacts</span>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="prevPageBtn">Previous</button>
-              <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="nextPageBtn">Next</button>
+          <!-- Suppression Search & Actions Toolbar -->
+          <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 240px;">
+                <input type="text" id="suppressionSearchInput" class="form-control" placeholder="🔍 Search blacklisted email address...">
+              </div>
+              <div style="width: 180px;">
+                <select id="suppressionReasonFilter" class="form-control" onchange="loadSuppressionList()">
+                  <option value="">All Reasons</option>
+                  <option value="unsubscribe">Unsubscribed</option>
+                  <option value="hard_bounce">Hard Bounce</option>
+                  <option value="complaint">Complaint</option>
+                  <option value="manual">Manual</option>
+                </select>
+              </div>
+              <button class="btn btn-secondary" onclick="loadSuppressionList()">
+                🔄 Refresh
+              </button>
+              <button class="btn btn-primary" onclick="openAddSuppressionModal()">
+                + Add to Blacklist
+              </button>
+            </div>
+          </div>
+
+          <!-- Suppression Table Card -->
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Email Address</th>
+                    <th>Suppression Reason</th>
+                    <th>Source Campaign</th>
+                    <th>Added On</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="suppressionTableBody">
+                  <!-- Injected via contacts.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="pagination-bar">
+              <span id="suppPaginationInfo">Showing 0 to 0 of 0 suppressed emails</span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="suppPrevPageBtn">Previous</button>
+                <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.8rem;" id="suppNextPageBtn">Next</button>
+              </div>
             </div>
           </div>
         </div>
@@ -273,6 +366,38 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" onclick="closeModal('groupManagerModal')">Done</button>
       </div>
+    </div>
+  <!-- Modal: Add to Suppression List -->
+  <div class="modal-overlay" id="addSuppressionModal">
+    <div class="modal-window" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Email to Suppression List</h3>
+        <button class="modal-close" onclick="closeModal('addSuppressionModal')">&times;</button>
+      </div>
+      <form id="addSuppressionForm">
+        <div class="modal-body">
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px;">
+            Blacklisted emails will be permanently skipped during all campaign queue expansions, preserving your sender reputation.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="suppressEmail">Email Address *</label>
+            <input type="email" id="suppressEmail" class="form-control" required placeholder="target@domain.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="suppressReason">Reason</label>
+            <select id="suppressReason" class="form-control">
+              <option value="manual">Manual Blacklist / Do Not Contact</option>
+              <option value="unsubscribe">User Opt-out / Unsubscribe</option>
+              <option value="hard_bounce">Hard Bounce (Invalid Mailbox)</option>
+              <option value="complaint">Spam Complaint</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('addSuppressionModal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add to Suppression</button>
+        </div>
+      </form>
     </div>
   </div>
 
