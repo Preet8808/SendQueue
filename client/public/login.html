@@ -35,6 +35,42 @@
       color: #fff;
       box-shadow: 0 2px 8px var(--primary-glow);
     }
+    .password-input-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .password-input-wrap .form-control {
+      padding-right: 44px;
+    }
+    .password-toggle-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: var(--transition);
+      user-select: none;
+      line-height: 0;
+    }
+    .password-toggle-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .password-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+    }
   </style>
 </head>
 <body style="background: radial-gradient(circle at 50% 30%, #1e1b4b, #0b0f19 70%);">
@@ -64,19 +100,27 @@
       <form id="loginForm">
         <div class="form-group">
           <label class="form-label" for="loginEmail">Email Address</label>
-          <input type="email" id="loginEmail" class="form-control" placeholder="admin@sendqueue.local" required value="admin@sendqueue.local">
+          <input type="email" id="loginEmail" class="form-control" placeholder="name@company.com" required autocomplete="email">
         </div>
 
         <div class="form-group">
           <label class="form-label" for="loginPassword">Password</label>
-          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required value="admin123">
+          <div class="password-input-wrap">
+            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePassword('loginPassword', this)" title="Show password" aria-label="Toggle password visibility">
+              <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; margin-top: 8px;">
           Sign In to Dashboard
         </button>
 
-        <div style="margin-top: 16px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
+        <div style="margin-top: 18px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
           Don't have an account? <a href="javascript:void(0)" onclick="setAuthMode('register')" style="color: #818cf8; text-decoration: none; font-weight: 600;">Create one</a>
         </div>
       </form>
@@ -85,17 +129,38 @@
       <form id="registerForm" style="display: none;">
         <div class="form-group">
           <label class="form-label" for="regName">Full Name</label>
-          <input type="text" id="regName" class="form-control" placeholder="Jane Doe" required>
+          <input type="text" id="regName" class="form-control" placeholder="Jane Doe" required autocomplete="name">
         </div>
 
         <div class="form-group">
           <label class="form-label" for="regEmail">Email Address</label>
-          <input type="email" id="regEmail" class="form-control" placeholder="jane@example.com" required>
+          <input type="email" id="regEmail" class="form-control" placeholder="jane@example.com" required autocomplete="email">
         </div>
 
         <div class="form-group">
           <label class="form-label" for="regPassword">Password (minimum 6 characters)</label>
-          <input type="password" id="regPassword" class="form-control" placeholder="••••••••" minlength="6" required>
+          <div class="password-input-wrap">
+            <input type="password" id="regPassword" class="form-control" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePassword('regPassword', this)" title="Show password" aria-label="Toggle password visibility">
+              <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regConfirmPassword">Confirm Password</label>
+          <div class="password-input-wrap">
+            <input type="password" id="regConfirmPassword" class="form-control" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePassword('regConfirmPassword', this)" title="Show password" aria-label="Toggle password visibility">
+              <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div style="font-size: 0.76rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 16px;">
@@ -106,19 +171,44 @@
           Create Member Account
         </button>
 
-        <div style="margin-top: 16px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
+        <div style="margin-top: 18px; text-align: center; font-size: 0.82rem; color: var(--text-secondary);">
           Already have an account? <a href="javascript:void(0)" onclick="setAuthMode('login')" style="color: #818cf8; text-decoration: none; font-weight: 600;">Sign in</a>
         </div>
       </form>
-
-      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); font-size: 0.78rem; color: var(--text-muted); text-align: center;">
-        Default Admin Seed: <code>admin@sendqueue.local</code> / <code>admin123</code>
-      </div>
     </div>
   </div>
 
   <script src="/js/api.js"></script>
   <script>
+    const eyeOpenSvg = `
+      <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    `;
+
+    const eyeClosedSvg = `
+      <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+      </svg>
+    `;
+
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = eyeClosedSvg;
+        btn.title = 'Hide password';
+      } else {
+        input.type = 'password';
+        btn.innerHTML = eyeOpenSvg;
+        btn.title = 'Show password';
+      }
+    }
+
     let currentMode = 'login';
     const alertBox = document.getElementById('alertBox');
 
@@ -172,18 +262,28 @@
       }
     });
 
-    // Register / Create Account Handler
+    // Register / Create Account Handler with 2x Password Verification
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       alertBox.className = 'alert-box';
       alertBox.textContent = '';
       const submitBtn = document.getElementById('regSubmitBtn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Creating account...';
 
       const name = document.getElementById('regName').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+      // Check passwords match
+      if (password !== confirmPassword) {
+        alertBox.className = 'alert-box alert-danger show';
+        alertBox.textContent = 'Passwords do not match. Please verify and re-type.';
+        document.getElementById('regConfirmPassword').focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account...';
 
       try {
         const res = await API.register(name, email, password);
