@@ -140,13 +140,13 @@ function renderControls(c) {
 
   let html = '';
   if (c.status === 'SENDING' || c.status === 'QUEUED') {
-    html += `<button class="btn btn-secondary" onclick="pauseCurrent()" style="font-size: 0.8rem; color: #fbbf24;">⏸ Pause</button>`;
-    html += `<button class="btn btn-secondary" onclick="cancelCurrent()" style="font-size: 0.8rem; color: #f87171;">⏹ Cancel</button>`;
+    html += `<button class="btn btn-secondary" onclick="pauseCurrent()" style="font-size: 0.8rem; color: #fbbf24;">Pause</button>`;
+    html += `<button class="btn btn-secondary" onclick="cancelCurrent()" style="font-size: 0.8rem; color: #f87171;">Cancel</button>`;
   } else if (c.status === 'PAUSED') {
-    html += `<button class="btn btn-primary" onclick="resumeCurrent()" style="font-size: 0.8rem;">▶ Resume</button>`;
-    html += `<button class="btn btn-secondary" onclick="cancelCurrent()" style="font-size: 0.8rem; color: #f87171;">⏹ Cancel</button>`;
+    html += `<button class="btn btn-primary" onclick="resumeCurrent()" style="font-size: 0.8rem;">Resume</button>`;
+    html += `<button class="btn btn-secondary" onclick="cancelCurrent()" style="font-size: 0.8rem; color: #f87171;">Cancel</button>`;
   } else if (c.status === 'COMPLETED') {
-    html += `<span style="font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px;">✓ All Emails Sent</span>`;
+    html += `<span style="font-size: 0.8rem; color: var(--success); display: flex; align-items: center; gap: 4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> All Emails Sent</span>`;
   }
 
   container.innerHTML = html;

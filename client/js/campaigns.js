@@ -97,7 +97,9 @@ function renderCampaignCards() {
   if (state.campaigns.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 70px 20px;">
-        <div style="font-size: 3rem; margin-bottom: 12px;">🚀</div>
+        <div style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin: 0 auto 12px; background: var(--bg-subtle); color: var(--text-muted); border-radius: var(--radius-full);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+        </div>
         <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 6px;">No campaigns created yet</h3>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
           Send your first email campaign to your contacts in just a few steps.
@@ -119,13 +121,13 @@ function renderCampaignCards() {
     let actionButtons = '';
     if (c.status === 'SENDING') {
       actionButtons = `
-        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem;" onclick="pauseCampaign('${c.id}')">⏸️ Pause</button>
-        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem; color: #fca5a5;" onclick="cancelCampaign('${c.id}')">❌ Cancel</button>
+        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem;" onclick="pauseCampaign('${c.id}')">Pause</button>
+        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem; color: var(--danger-text);" onclick="cancelCampaign('${c.id}')">Cancel</button>
       `;
     } else if (c.status === 'PAUSED') {
       actionButtons = `
-        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.78rem;" onclick="resumeCampaign('${c.id}')">▶️ Resume</button>
-        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem; color: #fca5a5;" onclick="cancelCampaign('${c.id}')">❌ Cancel</button>
+        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.78rem;" onclick="resumeCampaign('${c.id}')">Resume</button>
+        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.78rem; color: var(--danger-text);" onclick="cancelCampaign('${c.id}')">Cancel</button>
       `;
     }
 
@@ -143,11 +145,11 @@ function renderCampaignCards() {
           </div>
           <div style="display: flex; gap: 8px;">
             <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 5px 12px; font-size: 0.78rem; text-decoration: none; display: flex; align-items: center; gap: 4px;">
-              📊 Live Tracker
+              Live Tracker
             </a>
             ${actionButtons}
             <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.78rem;" onclick="openQueueInspector('${c.id}')">
-              🔍 View Email List
+              View Email List
             </button>
           </div>
         </div>
@@ -417,7 +419,7 @@ async function launchCampaign() {
     alert('Failed to launch campaign: ' + err.message);
   } finally {
     launchBtn.disabled = false;
-    launchBtn.textContent = '🚀 Send Campaign Now';
+    launchBtn.textContent = 'Send Campaign Now';
   }
 }
 
@@ -453,7 +455,7 @@ function showToast(msg) {
   toast.style.background = '#10b981';
   toast.style.color = '#fff';
   toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-  toast.innerHTML = `<span>✓</span> <span>${escapeHtml(msg)}</span>`;
+  toast.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${escapeHtml(msg)}</span>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }

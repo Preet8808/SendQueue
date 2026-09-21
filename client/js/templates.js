@@ -43,7 +43,7 @@ const PRESETS = [
   },
   {
     name: 'Special Discount or Promotion',
-    subject: 'Special 20% off for {{company | "our valued partners"}} 🎁',
+    subject: 'Special 20% off for {{company | "our valued partners"}}',
     body_html: `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111; line-height: 1.6; background: #fafafa; border: 1px solid #eaeaea; padding: 32px; border-radius: 12px;">
   <div style="background: #10b981; color: #fff; display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 16px;">SPECIAL BENEFIT</div>
   <h2 style="font-size: 22px; margin-bottom: 12px;">Special 20% savings for {{first_name | "friend"}},</h2>
@@ -117,7 +117,9 @@ function renderTemplatesGrid() {
   if (state.templates.length === 0) {
     container.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
-        <div style="font-size: 3rem; margin-bottom: 12px;">📝</div>
+        <div style="margin-bottom: 16px; color: var(--text-muted); opacity: 0.7;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+        </div>
         <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 6px;">No email templates found</h3>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Create your first template or start from an example.</p>
         <button class="btn btn-primary" onclick="openStudioModal()">+ Create Template</button>
@@ -138,7 +140,7 @@ function renderTemplatesGrid() {
           </div>
           <div style="background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 12px;">
             <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Subject Line</div>
-            <div style="font-size: 0.84rem; color: var(--primary); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject)}</div>
+            <div style="font-size: 0.84rem; color: var(--teal-accent); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject)}</div>
           </div>
           <div style="margin-bottom: 16px;">
             <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Personal Tags Used:</div>
@@ -147,14 +149,15 @@ function renderTemplatesGrid() {
         </div>
 
         <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 14px; margin-top: 10px;">
-          <button class="btn btn-primary" style="flex: 1; padding: 6px 12px; font-size: 0.82rem;" onclick="openEditStudioModal('${t.id}')">
-            ✏️ Edit Template
+          <button class="btn btn-primary" style="flex: 1; padding: 6px 12px; font-size: 0.82rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px;" onclick="openEditStudioModal('${t.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Edit Template
           </button>
-          <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.82rem;" onclick="cloneTemplate('${t.id}')" title="Duplicate template">
-            📋
+          <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.82rem; display: inline-flex; align-items: center; justify-content: center;" onclick="cloneTemplate('${t.id}')" title="Duplicate template">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="9" y="9" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           </button>
-          <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.82rem; color: #fca5a5;" onclick="deleteTemplate('${t.id}', '${escapeHtml(t.name)}')" title="Delete template">
-            🗑️
+          <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.82rem; color: #ef4444; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteTemplate('${t.id}', '${escapeHtml(t.name)}')" title="Delete template">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
           </button>
         </div>
       </div>
@@ -412,7 +415,7 @@ function showToast(msg) {
   toast.style.background = '#10b981';
   toast.style.color = '#fff';
   toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-  toast.innerHTML = `<span>✓</span> <span>${escapeHtml(msg)}</span>`;
+  toast.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${escapeHtml(msg)}</span>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }

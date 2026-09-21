@@ -107,7 +107,9 @@ function renderContactsTable() {
     tableBody.innerHTML = `
       <tr>
         <td colspan="7" style="text-align: center; padding: 60px 20px;">
-          <div style="font-size: 2.5rem; margin-bottom: 8px;">👥</div>
+          <div style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: 0 auto 10px; background: var(--bg-subtle); color: var(--text-muted); border-radius: var(--radius-full);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
           <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">No contacts found</div>
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Try modifying your search or import contacts via CSV.</p>
         </td>
@@ -145,8 +147,8 @@ function renderContactsTable() {
         <td>${groupBadges}</td>
         <td>${statusBadge}</td>
         <td style="text-align: right;">
-          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openEditContactModal('${c.id}')">✏️ Edit</button>
-          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; color: #fca5a5;" onclick="deleteContactPrompt('${c.id}', '${escapeHtml(c.email)}')">🗑️</button>
+          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openEditContactModal('${c.id}')">Edit</button>
+          <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; color: #ef4444;" onclick="deleteContactPrompt('${c.id}', '${escapeHtml(c.email)}')" title="Delete contact">Delete</button>
         </td>
       </tr>
     `;
@@ -634,7 +636,7 @@ function renderSuppressionTable() {
         </td>
         <td style="text-align: right;">
           <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="removeSuppression('${item.id}')" title="Unblock this email address">
-            🔓 Unblock
+            Unblock
           </button>
         </td>
       </tr>
@@ -749,7 +751,7 @@ function showToast(msg) {
   toast.style.background = '#10b981';
   toast.style.color = '#fff';
   toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-  toast.innerHTML = `<span>✓</span> <span>${escapeHtml(msg)}</span>`;
+  toast.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${escapeHtml(msg)}</span>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }

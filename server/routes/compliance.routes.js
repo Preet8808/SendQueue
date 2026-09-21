@@ -104,7 +104,9 @@ router.get('/unsubscribe', (req, res) => {
       </head>
       <body>
         <div class="card">
-          <div class="icon-badge">✓</div>
+          <div class="icon-badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
           <h1>Unsubscribe Successful</h1>
           <p>You have been safely removed from our mailing list. You will no longer receive campaigns from this sender.</p>
           ${result.email ? `<div class="email-tag">${result.email}</div>` : ''}

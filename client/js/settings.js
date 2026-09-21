@@ -72,7 +72,7 @@ function renderProviderCards(settings) {
         </div>
         <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 12px;">${escapeHtml(p.description)}</p>
         <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; width: 100%;" onclick="event.stopPropagation(); verifyProviderCredentials('${p.id}')">
-          ⚡ Test Connection
+          Test Connection
         </button>
       </div>
     `;
@@ -128,9 +128,9 @@ async function verifyProviderCredentials(providerName) {
   try {
     const res = await API.verifyProvider({ providerName });
     if (res.valid) {
-      alert(`✔ Connected successfully to ${providerName.toUpperCase()}: ${res.message}`);
+      alert(`Connected successfully to ${providerName.toUpperCase()}: ${res.message}`);
     } else {
-      alert(`✖ Connection failed for ${providerName.toUpperCase()}: ${res.error}`);
+      alert(`Connection failed for ${providerName.toUpperCase()}: ${res.error}`);
     }
   } catch (err) {
     alert(`Connection Error: ${err.message}`);
@@ -217,7 +217,7 @@ async function handleSendTestEmail(e) {
     alertEl.textContent = err.message || 'Test send failed.';
   } finally {
     sendBtn.disabled = false;
-    sendBtn.textContent = '🚀 Send Test Email';
+    sendBtn.textContent = 'Send Test Email';
   }
 }
 
@@ -244,7 +244,9 @@ function renderMockInboxTable() {
     tableBody.innerHTML = `
       <tr>
         <td colspan="5" style="text-align: center; padding: 50px 20px;">
-          <div style="font-size: 2.5rem; margin-bottom: 8px;">📬</div>
+          <div style="margin-bottom: 12px; color: var(--text-muted); opacity: 0.7;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+          </div>
           <div style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">Test Inbox is Empty</div>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">When Test Mode is active, any emails you send will appear here.</p>
         </td>
@@ -257,12 +259,12 @@ function renderMockInboxTable() {
     return `
       <tr>
         <td><strong style="color: var(--text-primary); font-size: 0.86rem;">${escapeHtml(m.recipient)}</strong></td>
-        <td><span style="font-size: 0.82rem; color: var(--primary); font-weight: 500;">${escapeHtml(m.subject)}</span></td>
+        <td><span style="font-size: 0.82rem; color: var(--teal-accent); font-weight: 500;">${escapeHtml(m.subject)}</span></td>
         <td><span style="font-size: 0.78rem; color: var(--text-secondary);">${escapeHtml(m.sender)}</span></td>
         <td><span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(m.created_at).toLocaleTimeString()}</span></td>
         <td style="text-align: right;">
           <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openMessageDetailModal('${m.id}')">
-            🔍 View Email
+            View Email
           </button>
         </td>
       </tr>
@@ -346,7 +348,7 @@ function showToast(msg) {
   toast.style.background = '#10b981';
   toast.style.color = '#fff';
   toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
-  toast.innerHTML = `<span>✓</span> <span>${escapeHtml(msg)}</span>`;
+  toast.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> <span>${escapeHtml(msg)}</span>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }

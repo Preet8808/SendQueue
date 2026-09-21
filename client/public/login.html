@@ -52,7 +52,9 @@
   <div class="login-wrap">
     <div class="login-card">
       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-        <div class="brand-icon">⚡</div>
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+        </div>
         <div>
           <h1 class="brand-title" style="font-size: 1.35rem;">SendQueue</h1>
           <p style="font-size: 0.78rem; color: var(--text-secondary);">Simple & Reliable Email Sender</p>
@@ -138,8 +140,9 @@
           </div>
         </div>
 
-        <div style="font-size: 0.76rem; color: var(--text-muted); background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 16px;">
-          ℹ️ New accounts are created as regular members.
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.76rem; color: var(--text-muted); background: var(--bg-subtle); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 16px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>New accounts are created as regular members.</span>
         </div>
 
         <button type="submit" id="regSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem;">
