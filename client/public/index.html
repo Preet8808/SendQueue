@@ -92,14 +92,6 @@
       <header class="top-bar">
         <div class="page-title">Dashboard</div>
         <div class="top-actions">
-          <div class="status-pill" id="healthPill">
-            <span class="pulse-dot"></span>
-            <span id="healthText">Connecting...</span>
-          </div>
-          <div class="status-pill" style="background: var(--bg-subtle); border-color: var(--border-color); color: var(--text-secondary);">
-            <span>Email Service:</span>
-            <strong id="providerBadge" style="color: var(--primary);">MOCK</strong>
-          </div>
           <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; font-size: 0.82rem;">
             + New Campaign
           </a>
@@ -240,25 +232,17 @@
         return;
       }
 
-      // 2. Fetch Health
+      // 2. Fetch Health & Diagnostics
       try {
         const health = await API.getHealth();
-        if (health.status === 'healthy') {
-          document.getElementById('healthText').textContent = 'System Online';
-          if (health.system) {
-            document.getElementById('diagMemory').textContent = `${health.system.memory.heapUsedMb} MB`;
-            const mins = Math.floor(health.system.uptimeSec / 60);
-            const hrs = Math.floor(mins / 60);
-            document.getElementById('diagUptime').textContent = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m ${health.system.uptimeSec % 60}s`;
-          }
+        if (health.status === 'healthy' && health.system) {
+          document.getElementById('diagMemory').textContent = `${health.system.memory.heapUsedMb} MB`;
+          const mins = Math.floor(health.system.uptimeSec / 60);
+          const hrs = Math.floor(mins / 60);
+          document.getElementById('diagUptime').textContent = hrs > 0 ? `${hrs}h ${mins % 60}m` : `${mins}m ${health.system.uptimeSec % 60}s`;
         }
       } catch (err) {
-        const pill = document.getElementById('healthPill');
-        if (pill) {
-          pill.style.background = 'rgba(239, 68, 68, 0.1)';
-          pill.style.color = '#f87171';
-        }
-        document.getElementById('healthText').textContent = 'Server Offline';
+        console.error('Health check failed:', err);
       }
 
       // 3. Fetch Enriched Stats
@@ -279,8 +263,6 @@
 
           document.getElementById('metricSuppressed').textContent = s.suppressed ?? 0;
           document.getElementById('metricSuppressedSub').textContent = `${q.bounced ?? 0} stopped safely`;
-
-          document.getElementById('providerBadge').textContent = (s.activeProvider || 'Mock').toUpperCase();
 
           renderRecentCampaigns(s.recentCampaigns || []);
         }
