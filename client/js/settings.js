@@ -65,9 +65,9 @@ function renderProviderCards(settings) {
   container.innerHTML = settings.availableProviders.map(p => {
     const isActive = p.id === active;
     return `
-      <div class="metric-card ${isActive ? 'active-provider-card' : ''}" style="cursor: pointer; position: relative; border-color: ${isActive ? 'var(--primary)' : 'var(--border-color)'}; background: ${isActive ? 'rgba(99, 102, 241, 0.08)' : 'var(--bg-card)'};" onclick="selectProvider('${p.id}')">
+      <div class="metric-card ${isActive ? 'active-provider-card' : ''}" style="cursor: pointer; position: relative; border-color: ${isActive ? 'var(--primary)' : 'var(--border-color)'}; background: ${isActive ? 'var(--primary-subtle)' : 'var(--bg-card)'};" onclick="selectProvider('${p.id}')">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-          <h4 style="color: #fff; font-size: 1rem; font-weight: 700;">${escapeHtml(p.name)}</h4>
+          <h4 style="color: var(--text-primary); font-size: 1rem; font-weight: 700;">${escapeHtml(p.name)}</h4>
           ${isActive ? '<span class="phase-badge badge-completed">Active Provider</span>' : '<span class="phase-badge badge-pending">Inactive</span>'}
         </div>
         <p style="color: var(--text-secondary); font-size: 0.8rem; margin-bottom: 12px;">${escapeHtml(p.description)}</p>
@@ -245,7 +245,7 @@ function renderMockInboxTable() {
       <tr>
         <td colspan="5" style="text-align: center; padding: 50px 20px;">
           <div style="font-size: 2.5rem; margin-bottom: 8px;">📬</div>
-          <div style="font-size: 1rem; font-weight: 600; color: #fff;">Test Inbox is Empty</div>
+          <div style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">Test Inbox is Empty</div>
           <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">When Test Mode is active, any emails you send will appear here.</p>
         </td>
       </tr>
@@ -256,8 +256,8 @@ function renderMockInboxTable() {
   tableBody.innerHTML = state.mockMessages.map(m => {
     return `
       <tr>
-        <td><strong style="color: #fff; font-size: 0.86rem;">${escapeHtml(m.recipient)}</strong></td>
-        <td><span style="font-size: 0.82rem; color: #93c5fd;">${escapeHtml(m.subject)}</span></td>
+        <td><strong style="color: var(--text-primary); font-size: 0.86rem;">${escapeHtml(m.recipient)}</strong></td>
+        <td><span style="font-size: 0.82rem; color: var(--primary); font-weight: 500;">${escapeHtml(m.subject)}</span></td>
         <td><span style="font-size: 0.78rem; color: var(--text-secondary);">${escapeHtml(m.sender)}</span></td>
         <td><span style="font-size: 0.75rem; color: var(--text-muted);">${new Date(m.created_at).toLocaleTimeString()}</span></td>
         <td style="text-align: right;">

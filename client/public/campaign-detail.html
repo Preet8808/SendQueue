@@ -45,7 +45,7 @@
     .metric-value {
       font-size: 1.7rem;
       font-weight: 800;
-      color: #fff;
+      color: var(--text-primary);
       display: flex;
       align-items: baseline;
       gap: 8px;
@@ -82,8 +82,8 @@
       align-items: center;
       gap: 10px;
       padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       animation: fadeIn 0.3s ease;
     }
@@ -98,11 +98,11 @@
       font-weight: 700;
       letter-spacing: 0.03em;
     }
-    .badge-SENT { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
-    .badge-DELIVERED { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-BOUNCE { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .badge-COMPLAINT { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .badge-UNSUBSCRIBE { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-SENT { background: var(--info-subtle); color: var(--info-text); border: 1px solid var(--info-border); }
+    .badge-DELIVERED { background: var(--success-subtle); color: var(--success-text); border: 1px solid var(--success-border); }
+    .badge-BOUNCE { background: var(--danger-subtle); color: var(--danger-text); border: 1px solid var(--danger-border); }
+    .badge-COMPLAINT { background: var(--warning-subtle); color: var(--warning-text); border: 1px solid var(--warning-border); }
+    .badge-UNSUBSCRIBE { background: var(--bg-subtle); color: var(--text-secondary); border: 1px solid var(--border-color); }
   </style>
 </head>
 <body>
@@ -118,21 +118,30 @@
         <span class="brand-badge">v1.0</span>
       </div>
 
+      <div class="sidebar-section-title">Overview</div>
       <ul class="nav-links">
         <li class="nav-item">
-          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
-        </li>
-        <li class="nav-item">
-          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+          <a href="/"><span style="font-size: 1rem;">📊</span> Dashboard</a>
         </li>
         <li class="nav-item active">
-          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+          <a href="/campaigns.html"><span style="font-size: 1rem;">🚀</span> Campaigns</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">Audience & Content</div>
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1rem;">👥</span> Contacts</a>
         </li>
         <li class="nav-item">
-          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+          <a href="/templates.html"><span style="font-size: 1rem;">📝</span> Templates</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">System</div>
+      <ul class="nav-links" style="flex: 1;">
+        <li class="nav-item">
+          <a href="/settings.html"><span style="font-size: 1rem;">⚙️</span> Settings</a>
         </li>
       </ul>
 
@@ -188,13 +197,13 @@
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
             <div>
               <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-                <h2 id="campaignSubject" style="font-size: 1.25rem; font-weight: 700; color: #fff;">Loading Subject...</h2>
+                <h2 id="campaignSubject" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Loading Subject...</h2>
                 <span id="campaignStatusPill" class="status-pill" style="font-size: 0.72rem; padding: 2px 10px;">QUEUED</span>
               </div>
               <div style="display: flex; gap: 20px; font-size: 0.82rem; color: var(--text-muted); flex-wrap: wrap;">
-                <div>From: <strong id="campaignSender" style="color: #cbd5e1;">—</strong></div>
-                <div>Template: <strong id="campaignTemplate" style="color: #cbd5e1;">—</strong></div>
-                <div>Speed: <strong id="campaignRate" style="color: #cbd5e1;">5/sec</strong></div>
+                <div>From: <strong id="campaignSender" style="color: var(--text-primary);">—</strong></div>
+                <div>Template: <strong id="campaignTemplate" style="color: var(--text-primary);">—</strong></div>
+                <div>Speed: <strong id="campaignRate" style="color: var(--text-primary);">5/sec</strong></div>
                 <div>Created: <span id="campaignCreated">—</span></div>
               </div>
             </div>

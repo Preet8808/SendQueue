@@ -108,7 +108,7 @@ function renderContactsTable() {
       <tr>
         <td colspan="7" style="text-align: center; padding: 60px 20px;">
           <div style="font-size: 2.5rem; margin-bottom: 8px;">👥</div>
-          <div style="font-size: 1.1rem; font-weight: 600; color: #fff;">No contacts found</div>
+          <div style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary);">No contacts found</div>
           <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Try modifying your search or import contacts via CSV.</p>
         </td>
       </tr>`;
@@ -125,19 +125,19 @@ function renderContactsTable() {
 
     const statusBadge = c.status === 'active' 
       ? '<span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px;"><span class="pulse-dot" style="width: 6px; height: 6px;"></span> Active</span>'
-      : `<span class="status-pill" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239,68,68,0.3); color: #fca5a5; font-size: 0.7rem; padding: 2px 8px;">${c.status}</span>`;
+      : `<span class="status-pill" style="background: var(--danger-subtle); border-color: var(--danger-border); color: var(--danger-text); font-size: 0.7rem; padding: 2px 8px;">${c.status}</span>`;
 
     return `
       <tr>
         <td style="width: 40px;"><input type="checkbox" class="contact-select" value="${c.id}"></td>
         <td>
           <div style="display: flex; align-items: center; gap: 10px;">
-            <div class="user-avatar" style="width: 28px; height: 28px; font-size: 11px; background: #312e81; color: #c7d2fe;">${initials}</div>
-            <strong style="font-size: 0.88rem; color: #fff;">${escapeHtml(fullName)}</strong>
+            <div class="user-avatar" style="width: 28px; height: 28px; font-size: 11px;">${initials}</div>
+            <strong style="font-size: 0.88rem; color: var(--text-primary);">${escapeHtml(fullName)}</strong>
           </div>
         </td>
         <td>
-          <span style="font-family: monospace; font-size: 0.82rem; color: #93c5fd;">${escapeHtml(c.email)}</span>
+          <span style="font-family: monospace; font-size: 0.82rem; color: var(--text-primary);">${escapeHtml(c.email)}</span>
         </td>
         <td>
           <span style="font-size: 0.82rem; color: var(--text-secondary);">${escapeHtml(c.company || '—')}</span>
@@ -305,7 +305,7 @@ function showImportMappingStep(preview) {
 
     return `
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
-        <span style="font-size: 0.85rem; font-weight: 500; color: #fff;">${f.label}</span>
+        <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-primary);">${f.label}</span>
         <select class="form-control" style="max-width: 240px; padding: 6px 12px;" id="map_${f.key}">
           ${optionsHtml}
         </select>
@@ -382,13 +382,13 @@ function renderGroupManagerRows() {
   }
 
   list.innerHTML = state.groups.map(g => `
-    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 8px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 8px;">
       <div>
-        <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(g.name)}</strong>
+        <strong style="color: var(--text-primary); font-size: 0.9rem;">${escapeHtml(g.name)}</strong>
         <span class="badge-group" style="margin-left: 8px;">${g.contact_count} contacts</span>
         ${g.description ? `<p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">${escapeHtml(g.description)}</p>` : ''}
       </div>
-      <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; color: #fca5a5;" onclick="deleteGroupPrompt('${g.id}', '${escapeHtml(g.name)}')">Delete</button>
+      <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 0.75rem; color: var(--danger-text);" onclick="deleteGroupPrompt('${g.id}', '${escapeHtml(g.name)}')">Delete</button>
     </div>
   `).join('');
 }
@@ -617,7 +617,7 @@ function renderSuppressionTable() {
     return `
       <tr>
         <td>
-          <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(item.email)}</strong>
+          <strong style="color: var(--text-primary); font-size: 0.9rem;">${escapeHtml(item.email)}</strong>
         </td>
         <td>
           <span class="${reasonBadgeClass}">${escapeHtml(reasonLabel)}</span>

@@ -23,24 +23,30 @@
         <span class="brand-badge">v1.0</span>
       </div>
 
+      <div class="sidebar-section-title">Overview</div>
       <ul class="nav-links">
         <li class="nav-item">
-          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+          <a href="/"><span style="font-size: 1rem;">📊</span> Dashboard</a>
         </li>
+        <li class="nav-item">
+          <a href="/campaigns.html"><span style="font-size: 1rem;">🚀</span> Campaigns</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">Audience & Content</div>
+      <ul class="nav-links">
         <li class="nav-item active">
-          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+          <a href="/contacts.html"><span style="font-size: 1rem;">👥</span> Contacts</a>
         </li>
         <li class="nav-item">
-          <a href="#" onclick="openGroupManagerModal()"><span style="font-size: 1.1rem;">📁</span> Groups</a>
+          <a href="/templates.html"><span style="font-size: 1rem;">📝</span> Templates</a>
         </li>
+      </ul>
+
+      <div class="sidebar-section-title">System</div>
+      <ul class="nav-links" style="flex: 1;">
         <li class="nav-item">
-          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
-        </li>
-        <li class="nav-item">
-          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
-        </li>
-        <li class="nav-item">
-          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+          <a href="/settings.html"><span style="font-size: 1rem;">⚙️</span> Settings</a>
         </li>
       </ul>
 
@@ -148,25 +154,25 @@
         <div id="suppressionView" style="display: none;">
           <!-- Suppression Stats Cards -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;">
-            <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Blocked</div>
-              <div style="font-size: 1.4rem; font-weight: 700; color: #fff;" id="suppStatTotal">0</div>
+            <div class="card" style="padding: 14px 16px; margin-bottom: 0;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Total Blocked</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;" id="suppStatTotal">0</div>
             </div>
-            <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #a855f7; text-transform: uppercase;">Unsubscribed</div>
-              <div style="font-size: 1.4rem; font-weight: 700; color: #c084fc;" id="suppStatUnsub">0</div>
+            <div class="card" style="padding: 14px 16px; margin-bottom: 0;">
+              <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Unsubscribed</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;" id="suppStatUnsub">0</div>
             </div>
-            <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #ef4444; text-transform: uppercase;">Invalid Addresses</div>
-              <div style="font-size: 1.4rem; font-weight: 700; color: #f87171;" id="suppStatBounce">0</div>
+            <div class="card" style="padding: 14px 16px; margin-bottom: 0;">
+              <div style="font-size: 0.72rem; color: var(--danger-text); text-transform: uppercase; font-weight: 600;">Invalid Addresses</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--danger-text); margin-top: 4px;" id="suppStatBounce">0</div>
             </div>
-            <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #f59e0b; text-transform: uppercase;">Spam Reports</div>
-              <div style="font-size: 1.4rem; font-weight: 700; color: #fbbf24;" id="suppStatComplaint">0</div>
+            <div class="card" style="padding: 14px 16px; margin-bottom: 0;">
+              <div style="font-size: 0.72rem; color: var(--warning-text); text-transform: uppercase; font-weight: 600;">Spam Reports</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--warning-text); margin-top: 4px;" id="suppStatComplaint">0</div>
             </div>
-            <div class="card" style="padding: 12px 16px;">
-              <div style="font-size: 0.72rem; color: #38bdf8; text-transform: uppercase;">Manually Blocked</div>
-              <div style="font-size: 1.4rem; font-weight: 700; color: #7dd3fc;" id="suppStatManual">0</div>
+            <div class="card" style="padding: 14px 16px; margin-bottom: 0;">
+              <div style="font-size: 0.72rem; color: var(--info-text); text-transform: uppercase; font-weight: 600;">Manually Blocked</div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: var(--info-text); margin-top: 4px;" id="suppStatManual">0</div>
             </div>
           </div>
 

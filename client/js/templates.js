@@ -118,7 +118,7 @@ function renderTemplatesGrid() {
     container.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 80px 20px;">
         <div style="font-size: 3rem; margin-bottom: 12px;">📝</div>
-        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 6px;">No email templates found</h3>
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 6px;">No email templates found</h3>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">Create your first template or start from an example.</p>
         <button class="btn btn-primary" onclick="openStudioModal()">+ Create Template</button>
       </div>
@@ -133,12 +133,12 @@ function renderTemplatesGrid() {
       <div class="metric-card" style="display: flex; flex-direction: column; justify-content: space-between;">
         <div>
           <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px;">
-            <h3 style="color: #fff; font-size: 1.05rem; font-weight: 700;">${escapeHtml(t.name)}</h3>
+            <h3 style="color: var(--text-primary); font-size: 1.05rem; font-weight: 700;">${escapeHtml(t.name)}</h3>
             <span style="font-size: 0.72rem; color: var(--text-muted);">${new Date(t.updated_at).toLocaleDateString()}</span>
           </div>
-          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 12px;">
+          <div style="background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 12px;">
             <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Subject Line</div>
-            <div style="font-size: 0.84rem; color: #93c5fd; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject)}</div>
+            <div style="font-size: 0.84rem; color: var(--primary); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject)}</div>
           </div>
           <div style="margin-bottom: 16px;">
             <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 6px;">Personal Tags Used:</div>

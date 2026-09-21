@@ -6,7 +6,7 @@
   function getPreferredTheme() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return saved;
-    return 'dark'; // Default theme
+    return 'light'; // Default theme: clean light SaaS
   }
 
   function applyTheme(theme) {

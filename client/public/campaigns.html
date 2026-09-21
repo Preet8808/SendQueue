@@ -23,21 +23,30 @@
         <span class="brand-badge">v1.0</span>
       </div>
 
+      <div class="sidebar-section-title">Overview</div>
       <ul class="nav-links">
         <li class="nav-item">
-          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
-        </li>
-        <li class="nav-item">
-          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+          <a href="/"><span style="font-size: 1rem;">📊</span> Dashboard</a>
         </li>
         <li class="nav-item active">
-          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
+          <a href="/campaigns.html"><span style="font-size: 1rem;">🚀</span> Campaigns</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">Audience & Content</div>
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1rem;">👥</span> Contacts</a>
         </li>
         <li class="nav-item">
-          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+          <a href="/templates.html"><span style="font-size: 1rem;">📝</span> Templates</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">System</div>
+      <ul class="nav-links" style="flex: 1;">
+        <li class="nav-item">
+          <a href="/settings.html"><span style="font-size: 1rem;">⚙️</span> Settings</a>
         </li>
       </ul>
 
@@ -64,7 +73,7 @@
     <main class="main-content">
       <!-- Top Bar -->
       <header class="top-bar">
-        <div class="page-title">Email Campaigns</div>
+        <div class="page-title">Campaigns</div>
         <div class="top-actions">
           <div class="status-pill">
             <span class="pulse-dot"></span>
@@ -80,7 +89,7 @@
       <div class="page-body">
         <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
           <div>
-            <h2 style="font-size: 1.15rem; color: #fff; font-weight: 700;">Active & Past Campaigns</h2>
+            <h2 style="font-size: 1.15rem; color: var(--text-primary); font-weight: 700;">Active & Past Campaigns</h2>
             <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
               See all your past and running email campaigns. Each campaign sends steadily and reliably.
             </p>
@@ -115,7 +124,7 @@
       <div class="modal-body">
         <!-- STEP 1: Details -->
         <div id="wizardStep1">
-          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Campaign Information</h4>
+          <h4 style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 14px;">Campaign Information</h4>
           <div class="form-group">
             <label class="form-label" for="wizCampaignName">Campaign Name *</label>
             <input type="text" id="wizCampaignName" class="form-control" placeholder="e.g. September Newsletter" required>
@@ -140,7 +149,7 @@
 
         <!-- STEP 2: Audience -->
         <div id="wizardStep2" style="display: none;">
-          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 6px;">Choose Who Receives This Email</h4>
+          <h4 style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 6px;">Choose Who Receives This Email</h4>
           <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 16px;">
             Leave unchecked to send to all contacts, or choose specific groups below:
           </p>
@@ -152,7 +161,7 @@
 
         <!-- STEP 3: Message / Template -->
         <div id="wizardStep3" style="display: none;">
-          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Your Email Message</h4>
+          <h4 style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 14px;">Your Email Message</h4>
           
           <div class="form-group">
             <label class="form-label" for="wizTemplateSelect">Choose a Template (Optional)</label>
@@ -174,11 +183,11 @@
 
         <!-- STEP 4: Launch & Rate Limit -->
         <div id="wizardStep4" style="display: none;">
-          <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 14px;">Review & Sending Speed</h4>
+          <h4 style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 14px;">Review & Sending Speed</h4>
 
-          <div class="card" style="background: rgba(0,0,0,0.25); margin-bottom: 20px;">
+          <div class="card" style="background: var(--bg-subtle); margin-bottom: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 0.82rem; color: #fff; font-weight: 600;">Sending Speed:</span>
+              <span style="font-size: 0.82rem; color: var(--text-primary); font-weight: 600;">Sending Speed:</span>
               <span class="badge-group" id="wizSpeedLabel">5 emails / sec</span>
             </div>
             <input type="range" id="wizSpeedSlider" min="1" max="50" value="5" style="width: 100%; cursor: pointer;">
@@ -187,12 +196,12 @@
             </p>
           </div>
 
-          <div class="card" style="background: rgba(0,0,0,0.25); font-size: 0.84rem; line-height: 1.8;">
-            <div style="font-weight: 700; color: #fff; margin-bottom: 6px;">Campaign Summary:</div>
-            <div>Campaign Name: <strong id="summaryCampaignName" style="color: #93c5fd;">—</strong></div>
-            <div>Subject Line: <strong id="summarySubject" style="color: #fff;">—</strong></div>
-            <div>Recipients: <strong id="summaryAudience" style="color: #34d399;">—</strong></div>
-            <div>Speed: <strong id="summarySpeed" style="color: #a5b4fc;">—</strong></div>
+          <div class="card" style="background: var(--bg-subtle); font-size: 0.84rem; line-height: 1.8;">
+            <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Campaign Summary:</div>
+            <div>Campaign Name: <strong id="summaryCampaignName" style="color: var(--primary);">—</strong></div>
+            <div>Subject Line: <strong id="summarySubject" style="color: var(--text-primary);">—</strong></div>
+            <div>Recipients: <strong id="summaryAudience" style="color: var(--success);">—</strong></div>
+            <div>Estimated Delivery Speed: <strong id="summaryRate" style="color: var(--text-primary);">—</strong></div>
           </div>
         </div>
       </div>

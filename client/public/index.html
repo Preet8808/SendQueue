@@ -23,21 +23,30 @@
         <span class="brand-badge">v1.0</span>
       </div>
 
+      <div class="sidebar-section-title">Overview</div>
       <ul class="nav-links">
         <li class="nav-item active">
-          <a href="/"><span style="font-size: 1.1rem;">📊</span> Dashboard</a>
+          <a href="/"><span style="font-size: 1rem;">📊</span> Dashboard</a>
         </li>
         <li class="nav-item">
-          <a href="/contacts.html"><span style="font-size: 1.1rem;">👥</span> Contacts</a>
+          <a href="/campaigns.html"><span style="font-size: 1rem;">🚀</span> Campaigns</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-section-title">Audience & Content</div>
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/contacts.html"><span style="font-size: 1rem;">👥</span> Contacts</a>
         </li>
         <li class="nav-item">
-          <a href="/templates.html"><span style="font-size: 1.1rem;">📝</span> Templates</a>
+          <a href="/templates.html"><span style="font-size: 1rem;">📝</span> Templates</a>
         </li>
+      </ul>
+
+      <div class="sidebar-section-title">System</div>
+      <ul class="nav-links" style="flex: 1;">
         <li class="nav-item">
-          <a href="/campaigns.html"><span style="font-size: 1.1rem;">🚀</span> Campaigns</a>
-        </li>
-        <li class="nav-item">
-          <a href="/settings.html"><span style="font-size: 1.1rem;">⚙️</span> Settings</a>
+          <a href="/settings.html"><span style="font-size: 1rem;">⚙️</span> Settings</a>
         </li>
       </ul>
 
@@ -70,9 +79,9 @@
             <span class="pulse-dot"></span>
             <span id="healthText">Connecting...</span>
           </div>
-          <div class="status-pill" style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2); color: #a5b4fc;">
+          <div class="status-pill" style="background: var(--bg-subtle); border-color: var(--border-color); color: var(--text-secondary);">
             <span>Email Service:</span>
-            <strong id="providerBadge">MOCK</strong>
+            <strong id="providerBadge" style="color: var(--primary);">MOCK</strong>
           </div>
           <a href="/campaigns.html" class="btn btn-primary" style="text-decoration: none; font-size: 0.82rem;">
             + New Campaign
@@ -168,91 +177,18 @@
             </div>
 
             <!-- Health Snapshot Widget -->
-            <div style="margin-top: 24px; padding: 14px; background: rgba(0,0,0,0.15); border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem;">
+            <div style="margin-top: 24px; padding: 14px; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.8rem;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span style="color: var(--text-muted);">Server Memory:</span>
-                <strong id="diagMemory" style="color: #fff;">—</strong>
+                <strong id="diagMemory" style="color: var(--text-primary);">—</strong>
               </div>
               <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span style="color: var(--text-muted);">Running For:</span>
-                <strong id="diagUptime" style="color: #fff;">—</strong>
+                <strong id="diagUptime" style="color: var(--text-primary);">—</strong>
               </div>
               <div style="display: flex; justify-content: space-between;">
                 <span style="color: var(--text-muted);">Spam & Rate Protection:</span>
                 <strong style="color: var(--success);">Active</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section-Wise Execution Progress (Completed Architecture) -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h2 class="card-title">Features & Setup Status</h2>
-              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-                All core features are built, tested, and ready to use.
-              </p>
-            </div>
-            <span class="badge-active phase-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
-              All 7 Phases Complete
-            </span>
-          </div>
-
-          <div class="phase-list">
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 1: Setup & Secure Database</div>
-                <div class="phase-desc">Fast local database storage, user login accounts, and system security.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 2: Contacts & Easy CSV Import</div>
-                <div class="phase-desc">Add, edit, and organize contacts into groups, with easy spreadsheet import.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 3: Email Templates & Live Preview</div>
-                <div class="phase-desc">Design beautiful emails with personal greeting tags (like Hi {{name}}) and instant preview.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 4: Email Services & Testing</div>
-                <div class="phase-desc">Connect to popular email services (Resend, SES, SendGrid, SMTP) or test for free.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 5: Smart Sending Queue</div>
-                <div class="phase-desc">Controls sending speed automatically so your emails never get flagged as spam.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 6: Unsubscribe & Live Tracking</div>
-                <div class="phase-desc">Safe one-click unsubscribe links, blocked email list, and live delivery updates.</div>
-              </div>
-            </div>
-
-            <div class="phase-item completed">
-              <span class="phase-badge badge-completed">✓ Complete</span>
-              <div class="phase-details">
-                <div class="phase-name">Section 7: Easy Design & System Health</div>
-                <div class="phase-desc">Clean look, dark/light mode switch, spam protection, and live server stats.</div>
               </div>
             </div>
           </div>
@@ -342,34 +278,37 @@
       }
 
       container.innerHTML = campaigns.map(c => {
-        let statusColor = '#9ca3af';
-        if (c.status === 'SENDING') statusColor = '#38bdf8';
-        if (c.status === 'COMPLETED') statusColor = '#34d399';
-        if (c.status === 'PAUSED') statusColor = '#f59e0b';
-        if (c.status === 'FAILED') statusColor = '#f87171';
+        let statusBadge = '<span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px; margin-left: 8px;">COMPLETED</span>';
+        if (c.status === 'SENDING') {
+          statusBadge = '<span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px; margin-left: 8px; background: var(--info-subtle); border-color: var(--info-border); color: var(--info-text);"><span class="pulse-dot" style="background: var(--info);"></span> SENDING</span>';
+        } else if (c.status === 'PAUSED') {
+          statusBadge = '<span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px; margin-left: 8px; background: var(--warning-subtle); border-color: var(--warning-border); color: var(--warning-text);">PAUSED</span>';
+        } else if (c.status === 'FAILED') {
+          statusBadge = '<span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px; margin-left: 8px; background: var(--danger-subtle); border-color: var(--danger-border); color: var(--danger-text);">FAILED</span>';
+        }
 
         const percent = c.progressPercent || 0;
 
         return `
-          <div style="padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <div>
-                <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(c.name)}</strong>
-                <span class="status-pill" style="font-size: 0.68rem; padding: 2px 8px; margin-left: 8px; color: ${statusColor}; border-color: ${statusColor};">${c.status}</span>
+          <div style="padding: 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 10px; box-shadow: var(--shadow-xs);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center;">
+                <strong style="color: var(--text-primary); font-size: 0.9rem;">${escapeHtml(c.name)}</strong>
+                ${statusBadge}
               </div>
-              <a href="/campaign-detail.html?id=${c.id}" class="btn btn-primary" style="padding: 3px 8px; font-size: 0.72rem; text-decoration: none;">
-                📊 View Progress
+              <a href="/campaign-detail.html?id=${c.id}" class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem; text-decoration: none;">
+                View Details →
               </a>
             </div>
 
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
-              <span>Sent: <strong style="color: #fff;">${c.sent_count || 0} / ${c.total_recipients || 0}</strong></span>
-              <span>Delivered: <strong style="color: #34d399;">${c.delivered_count || 0}</strong></span>
-              <span>${percent}%</span>
+            <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px;">
+              <span>Sent: <strong style="color: var(--text-primary);">${c.sent_count || 0} / ${c.total_recipients || 0}</strong></span>
+              <span>Delivered: <strong style="color: var(--success);">${c.delivered_count || 0}</strong></span>
+              <span><strong>${percent}%</strong></span>
             </div>
 
-            <div style="height: 6px; background: rgba(255,255,255,0.08); border-radius: var(--radius-full); overflow: hidden;">
-              <div style="width: ${percent}%; height: 100%; background: ${percent === 100 ? 'var(--success)' : 'linear-gradient(90deg, var(--primary), #a855f7)'}; border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
+            <div style="height: 6px; background: var(--border-light); border: 1px solid var(--border-color); border-radius: var(--radius-full); overflow: hidden;">
+              <div style="width: ${percent}%; height: 100%; background: ${percent === 100 ? 'var(--success)' : 'var(--primary)'}; border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
             </div>
           </div>
         `;

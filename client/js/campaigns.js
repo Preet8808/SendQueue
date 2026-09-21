@@ -98,7 +98,7 @@ function renderCampaignCards() {
     container.innerHTML = `
       <div style="text-align: center; padding: 70px 20px;">
         <div style="font-size: 3rem; margin-bottom: 12px;">🚀</div>
-        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 6px;">No campaigns created yet</h3>
+        <h3 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 6px;">No campaigns created yet</h3>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
           Send your first email campaign to your contacts in just a few steps.
         </p>
@@ -134,11 +134,11 @@ function renderCampaignCards() {
         <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
           <div>
             <div style="display: flex; align-items: center; gap: 10px;">
-              <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700;">${escapeHtml(c.name)}</h3>
+              <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 700;">${escapeHtml(c.name)}</h3>
               <span class="phase-badge ${statusClass}">${c.status}</span>
             </div>
             <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px;">
-              Subject: <strong style="color: #93c5fd;">${escapeHtml(c.subject)}</strong> &bull; From: ${escapeHtml(c.from_name)} &lt;${escapeHtml(c.from_email)}&gt;
+              Subject: <strong style="color: var(--text-primary);">${escapeHtml(c.subject)}</strong> &bull; From: ${escapeHtml(c.from_name)} &lt;${escapeHtml(c.from_email)}&gt;
             </div>
           </div>
           <div style="display: flex; gap: 8px;">
@@ -156,21 +156,21 @@ function renderCampaignCards() {
         <div style="margin: 16px 0 12px 0;">
           <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
             <span style="color: var(--text-muted);">Sending Progress</span>
-            <span style="color: #fff; font-weight: 600;">${percent}% (${c.sent_count} / ${c.total_recipients} sent)</span>
+            <span style="color: var(--text-primary); font-weight: 600;">${percent}% (${c.sent_count} / ${c.total_recipients} sent)</span>
           </div>
-          <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: var(--radius-full); overflow: hidden;">
-            <div style="width: ${percent}%; height: 100%; background: ${percent === 100 ? 'var(--success)' : 'linear-gradient(90deg, var(--primary), #a855f7)'}; border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
+          <div style="height: 8px; background: var(--border-light); border: 1px solid var(--border-color); border-radius: var(--radius-full); overflow: hidden;">
+            <div style="width: ${percent}%; height: 100%; background: ${percent === 100 ? 'var(--success)' : 'var(--primary)'}; border-radius: var(--radius-full); transition: width 0.4s ease;"></div>
           </div>
         </div>
 
         <!-- Metrics Strip -->
         <div style="display: flex; gap: 20px; font-size: 0.8rem; border-top: 1px solid var(--border-color); padding-top: 12px; flex-wrap: wrap;">
-          <div><span style="color: var(--text-muted);">Recipients:</span> <strong style="color: #fff;">${c.total_recipients}</strong></div>
-          <div><span style="color: var(--text-muted);">Sent:</span> <strong style="color: #38bdf8;">${c.sent_count}</strong></div>
-          <div><span style="color: var(--text-muted);">Delivered:</span> <strong style="color: #34d399;">${c.delivered_count || 0}</strong></div>
-          <div><span style="color: var(--text-muted);">Bounced:</span> <strong style="color: #f87171;">${c.bounced_count || 0}</strong></div>
-          <div><span style="color: var(--text-muted);">Waiting:</span> <strong style="color: #a5b4fc;">${c.pending_count}</strong></div>
-          <div><span style="color: var(--text-muted);">Speed:</span> <strong style="color: #fff;">${c.rate_limit_per_sec} emails / sec</strong></div>
+          <div><span style="color: var(--text-muted);">Recipients:</span> <strong style="color: var(--text-primary);">${c.total_recipients}</strong></div>
+          <div><span style="color: var(--text-muted);">Sent:</span> <strong style="color: var(--info-text);">${c.sent_count}</strong></div>
+          <div><span style="color: var(--text-muted);">Delivered:</span> <strong style="color: var(--success);">${c.delivered_count || 0}</strong></div>
+          <div><span style="color: var(--text-muted);">Bounced:</span> <strong style="color: var(--danger-text);">${c.bounced_count || 0}</strong></div>
+          <div><span style="color: var(--text-muted);">Waiting:</span> <strong style="color: var(--text-muted);">${c.pending_count}</strong></div>
+          <div><span style="color: var(--text-muted);">Speed:</span> <strong style="color: var(--text-primary);">${c.rate_limit_per_sec} emails / sec</strong></div>
           <div style="margin-left: auto; color: var(--text-muted); font-size: 0.75rem;">Created: ${new Date(c.created_at).toLocaleString()}</div>
         </div>
       </div>
@@ -241,7 +241,7 @@ async function loadRecipientLogs(campaignId) {
 
       return `
         <tr>
-          <td><strong style="color: #fff; font-size: 0.84rem;">${escapeHtml(r.recipient_email)}</strong></td>
+          <td><strong style="color: var(--text-primary); font-size: 0.84rem;">${escapeHtml(r.recipient_email)}</strong></td>
           <td><span style="font-size: 0.8rem; color: var(--text-secondary);">${escapeHtml(r.company || '—')}</span></td>
           <td><span class="status-pill" style="font-size: 0.7rem; padding: 2px 8px; color: ${statusColor}; border-color: ${statusColor};">${r.status}</span></td>
           <td><span style="font-size: 0.78rem; color: var(--text-muted);">${r.attempt_count} / ${r.max_attempts}</span></td>
@@ -287,10 +287,10 @@ function renderWizardAudienceGroups() {
   }
 
   container.innerHTML = state.groups.map(g => `
-    <label style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 6px; cursor: pointer;">
+    <label style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 6px; cursor: pointer;">
       <div style="display: flex; align-items: center; gap: 8px;">
         <input type="checkbox" name="wizGroupSelection" value="${g.id}">
-        <span style="font-size: 0.85rem; color: #fff;">${escapeHtml(g.name)}</span>
+        <span style="font-size: 0.85rem; color: var(--text-primary);">${escapeHtml(g.name)}</span>
       </div>
       <span class="badge-group">${g.contact_count} contacts</span>
     </label>

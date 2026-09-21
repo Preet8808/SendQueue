@@ -210,7 +210,7 @@ function renderEventFeed(events) {
       <div class="stream-item">
         <span style="color: var(--text-muted);">${time}</span>
         <span class="badge-event badge-${eventType}">${eventType}</span>
-        <span style="color: #fff; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+        <span style="color: var(--text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
           ${escapeHtml(payload.email || detail || 'Event logged')}
         </span>
         ${payload.simulated ? '<span style="font-size: 0.65rem; color: #a855f7; border: 1px solid rgba(168,85,247,0.3); padding: 1px 4px; border-radius: 3px;">SIM</span>' : ''}
@@ -249,7 +249,7 @@ async function loadRecipients() {
       return `
         <tr>
           <td>
-            <a href="javascript:void(0)" onclick="selectRecipientForSim('${escapeHtml(r.recipient_email)}')" style="color: #fff; font-weight: 600; text-decoration: none;" title="Click to test webhook simulation">
+            <a href="javascript:void(0)" onclick="selectRecipientForSim('${escapeHtml(r.recipient_email)}')" style="color: var(--text-primary); font-weight: 600; text-decoration: none;" title="Click to test webhook simulation">
               ${escapeHtml(r.recipient_email)}
             </a>
             <div style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(r.company || '')}</div>
